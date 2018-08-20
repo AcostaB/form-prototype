@@ -9,7 +9,7 @@ import { map } from "lodash";
 import styled from "styled-components";
 
 interface IProps {
-  errors?: string[];
+  errors?: string[] | null | undefined;
   fieldName: string;
   classes: any; // TODO fix this any
 }

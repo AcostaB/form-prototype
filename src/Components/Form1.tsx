@@ -2,15 +2,17 @@ import React, {
   SFC
 } from 'react';
 import styled from "styled-components";
-
 import { createStyles, withStyles, Theme } from "@material-ui/core";
 import ValidatedInput from "../UI-Toolkit/ValidatedInput";
+import { required, maxLength, email } from "../Validators/Validators";
 
 interface IProps extends IPerson {
   // TODO: Make a type alias for this.
-  onFieldChange: (name: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void,
+  onFieldChange: (name: Key<IPerson>) => (newValue: any) => void,
+  onValidationChange: (name: Key<IPerson>) => (newErrors: string[]) => void,
   // TODO: fix this any
-  classes: any
+  classes: any,
+  errors: KeyedErrors<IPerson>
 }
 
 const Form1: SFC<IProps> = (props) => {
@@ -20,8 +22,46 @@ const Form1: SFC<IProps> = (props) => {
         value={props.name}
         fieldName="name"
         label="Name: "
-        onFieldChange={props.onFieldChange}
-        errors={['TEST - Required - very looooong looooong looooong looooong', 'test2']}
+        onFieldChange={props.onFieldChange("name")}
+        onValidationChange={props.onValidationChange("name")}
+        errors={props.errors.name}
+        validators={[required, maxLength(20)]}
+      />
+      <ValidatedInput
+        value={props.email}
+        fieldName="email"
+        label="Email: "
+        onFieldChange={props.onFieldChange("email")}
+        onValidationChange={props.onValidationChange("email")}
+        errors={props.errors.email}
+        validators={[required, maxLength(20), email]}
+      />
+      <ValidatedInput
+        value={props.age}
+        fieldName="age"
+        label="Age: "
+        onFieldChange={props.onFieldChange("age")}
+        onValidationChange={props.onValidationChange("age")}
+        errors={props.errors.age}
+        validators={[required, maxLength(20)]}
+      />
+      <ValidatedInput
+        value={props.email}
+        fieldName="dateOfBirth"
+        label="Date of Birth: "
+        onFieldChange={props.onFieldChange("dateOfBirth")}
+        onValidationChange={props.onValidationChange("dateOfBirth")}
+        errors={props.errors.dateOfBirth}
+        validators={[required, maxLength(20)]}
+      />
+      <ValidatedInput
+        value={props.email}
+        fieldName="gender"
+        label="Gender: "
+        onFieldChange={props.onFieldChange("gender")}
+        onValidationChange={props.onValidationChange("gender")}
+        errors={props.errors.gender}
+        validators={[required, maxLength(20)]}
       />
     </Form1Container>
   );

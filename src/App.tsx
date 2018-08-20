@@ -1,19 +1,19 @@
 import './App.css';
 import Form1 from "./Components/Form1";
-import Form2 from "./Components/Form2";
+// import Form2 from "./Components/Form2";
 import logo from './logo.svg';
 import * as React from 'react';
 import styled from "styled-components";
 
 interface IState {
-  name: string,
-  age: number,
-  dateOfBirth: string,
-  gender: string,
-  dogName: string,
-  breed: string,
-  dogAge: number,
-  size: string
+  person: IPerson,
+  dog: IDog,
+  form1: {
+    errors: KeyedErrors<IPerson>
+  },
+  form2: {
+    errors: KeyedErrors<IDog>
+  }
 }
 
 class App extends React.Component<{}, IState> {
@@ -21,25 +21,79 @@ class App extends React.Component<{}, IState> {
     super(props);
 
     this.state = {
-      age: 0,
-      breed: '',
-      dateOfBirth: '',
-      dogAge: 0,
-      dogName: '',
-      gender: '',
-      name: '',
-      size: ''
-    };
-  }
-
-  // TODO: this name property can be casted as a value in the state.
-  public handleFieldChange = (name: string) => {
-    // const self = this;
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-      const newValue: string = e.target.value;
-      this.setState(prevState => ({ ...prevState, [name]: newValue }));
+      dog: {
+        age: 0,
+        breed: '',
+        name: '',
+        size: ''
+      },
+      form1: {
+        errors: {}
+      },
+      form2: {
+        errors: {}
+      },
+      person: {
+        age: 0,
+        dateOfBirth: '',
+        email: '',
+        gender: '',
+        name: ''
+      }
     };
   };
+
+  public handlePersonFieldChange = (name: Key<IPerson>) => {
+    return (newValue: any) => {
+      this.setState(prevState => (
+        {
+          ...prevState,
+          person: {
+            ...prevState.person,
+            [name]: newValue
+          }
+        }
+      ));
+    };
+  };
+
+  public handlePersonValidationChange = (name: Key<IPerson>) => {
+    return (newErrors: string[]) => {
+      this.setState(prevState => (
+        {
+          ...prevState,
+          form1: {
+            ...prevState.form1,
+            errors: {
+              ...prevState.form1.errors,
+              [name]: newErrors
+            }
+          }
+        }
+      ));
+    };
+  };
+
+  // public handleDogFieldChange = (name: Key<IDog>) => {
+  //   return (newValue: any, newErrors: string[]) => {
+  //     this.setState(prevState => (
+  //       {
+  //         ...prevState,
+  //         dog: {
+  //           ...prevState.dog,
+  //           [name]: newValue
+  //         },
+  //         form2: {
+  //           ...prevState.form2,
+  //           errors: {
+  //             ...prevState.form2.errors,
+  //             [name]: newErrors
+  //           }
+  //         },
+  //       }
+  //     ));
+  //   };
+  // };
 
   public render() {
     return (
@@ -49,19 +103,23 @@ class App extends React.Component<{}, IState> {
           <Title className="App-title">Welcome to React</Title>
         </Header>
         <Form1
-          age={this.state.age}
-          dateOfBirth={this.state.dateOfBirth}
-          gender={this.state.gender}
-          name={this.state.name}
-          onFieldChange={this.handleFieldChange}
+          age={this.state.person.age}
+          dateOfBirth={this.state.person.dateOfBirth}
+          email={this.state.person.email}
+          gender={this.state.person.gender}
+          name={this.state.person.name}
+          onFieldChange={this.handlePersonFieldChange}
+          onValidationChange={this.handlePersonValidationChange}
+          errors={this.state.form1.errors}
         />
-        <Form2
-          age={this.state.dogAge}
-          breed={this.state.breed}
-          name={this.state.dogName}
-          onFieldChange={this.handleFieldChange}
-          size={this.state.size}
-        />
+        {/* <Form2
+          age={this.state.dog.age}
+          breed={this.state.dog.breed}
+          name={this.state.dog.name}
+          onFieldChange={this.handleDogFieldChange}
+          size={this.state.dog.size}
+          errors={this.state.form2.errors}
+        /> */}
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       </div>
     );

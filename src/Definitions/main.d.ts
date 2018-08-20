@@ -1,13 +1,26 @@
 interface IPerson {
-  name: string,
   age: number,
   dateOfBirth: string,
-  gender: string
+  email: string,
+  gender: string,
+  name: string
 }
 
 interface IDog {
-  name: string,
+  age: number,
   breed: string,
-  size: string,
-  age: number
+  name: string,
+  size: string
 }
+
+// TODO: improve on this so its non function properties only
+type Key<T> = keyof T;
+
+type Keyed<T> = { [id: number]: T };
+
+type KeyedErrors<T> = { [K in keyof T]?: string[] | null | undefined };
+
+type Validator = (...param: any[]) => string | null | undefined;
+
+// TODO: this could potentially be a type
+// type DogFormChangeHandler<T> = 

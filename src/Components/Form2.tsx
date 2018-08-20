@@ -7,9 +7,10 @@ import { createStyles, TextField, withStyles, Theme } from "@material-ui/core";
 
 interface IProps extends IDog {
   // TODO: Make a type alias for this.
-  onFieldChange: (name: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void,
+  onFieldChange: (name: Key<IDog>) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void,
   // TODO: fix this any
-  classes: any
+  classes: any,
+  errors: KeyedErrors<IDog>
 }
 
 const Form2: SFC<IProps> = (props) => {
@@ -18,7 +19,7 @@ const Form2: SFC<IProps> = (props) => {
       <TextField
         label="Name: "
         value={props.name}
-        onChange={props.onFieldChange('dogName')}
+        onChange={props.onFieldChange('name')}
         className={props.classes.textField}
       />
       <TextField
@@ -30,13 +31,13 @@ const Form2: SFC<IProps> = (props) => {
       <TextField
         label="Age: "
         value={props.age}
-        onChange={props.onFieldChange('dogAge')} // TODO: this could cause exception with invalid number.
+        onChange={props.onFieldChange('age')} // TODO: this could cause exception with invalid number.
         className={props.classes.textField}
       />
       <TextField
         label="Size: "
         value={props.size}
-        onChange={props.onFieldChange('dogSize')}
+        onChange={props.onFieldChange('size')}
         className={props.classes.textField}
       />
     </Form2Container>
