@@ -17,6 +17,6 @@ export const maxLength = (maxCharacterLength: number) => (value: number) => {
   // get the maxLength from component's props
   if (value.toString().trim().length >= maxCharacterLength) {
     // Return jsx
-    return 'The value exceeded {maxCharacterLength} characters.';
+    return `The value exceeded ${maxCharacterLength} characters.`;
   } else { return null }
 };
