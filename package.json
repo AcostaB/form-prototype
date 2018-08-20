@@ -1,0 +1,31 @@
+{
+  "name": "data-collection-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@": "types/validator",
+    "@material-ui/core": "^1.5.0",
+    "@types/lodash": "^4.14.116",
+    "@types/validator": "^9.4.1",
+    "lodash": "^4.17.10",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-redux": "^5.0.7",
+    "react-scripts-ts": "2.17.0",
+    "styled-components": "^3.4.2",
+    "validator": "^10.5.0"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.7.1",
+    "@types/react": "^16.4.11",
+    "@types/react-dom": "^16.0.7",
+    "typescript": "^3.0.1"
+  }
+}
