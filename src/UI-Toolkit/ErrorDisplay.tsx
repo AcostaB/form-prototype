@@ -43,7 +43,8 @@ const ErrorDisplay: SFC<IProps> = ({ errors, fieldName, classes }) => {
 const ErrorRow = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 6px;
+  margin-top: 5px;
+  height: 14px;
 `;
 
 const ErrorText = styled.div`

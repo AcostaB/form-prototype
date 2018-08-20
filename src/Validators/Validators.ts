@@ -8,8 +8,8 @@ export const required = (value: string) => {
 };
 
 export const email = (value: string) => {
-  if (!isEmail(value)) {
-    return `${value} is not a valid email.`
+  if (!isEmail(value) && value) {
+    return `"${value}" is not a valid email.`
   } else { return null }
 };
 

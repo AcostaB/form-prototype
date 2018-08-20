@@ -103,11 +103,7 @@ class App extends React.Component<{}, IState> {
           <Title className="App-title">Welcome to React</Title>
         </Header>
         <Form1
-          age={this.state.person.age}
-          dateOfBirth={this.state.person.dateOfBirth}
-          email={this.state.person.email}
-          gender={this.state.person.gender}
-          name={this.state.person.name}
+          {...this.state.person}
           onFieldChange={this.handlePersonFieldChange}
           onValidationChange={this.handlePersonValidationChange}
           errors={this.state.form1.errors}

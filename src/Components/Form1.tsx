@@ -2,7 +2,6 @@ import React, {
   SFC
 } from 'react';
 import styled from "styled-components";
-import { createStyles, withStyles, Theme } from "@material-ui/core";
 import ValidatedInput from "../UI-Toolkit/ValidatedInput";
 import { required, maxLength, email } from "../Validators/Validators";
 
@@ -11,7 +10,6 @@ interface IProps extends IPerson {
   onFieldChange: (name: Key<IPerson>) => (newValue: any) => void,
   onValidationChange: (name: Key<IPerson>) => (newErrors: string[]) => void,
   // TODO: fix this any
-  classes: any,
   errors: KeyedErrors<IPerson>
 }
 
@@ -69,14 +67,7 @@ const Form1: SFC<IProps> = (props) => {
 
 const Form1Container = styled.form`
     margin: 10px 10px;
+    width: 400px
   `;
 
-const styles = ({ spacing }: Theme) => createStyles({
-  textField: {
-    marginLeft: spacing.unit,
-    marginRight: spacing.unit,
-    width: 200,
-  }
-})
-
-export default withStyles(styles)(Form1);
+export default Form1;

@@ -4,10 +4,11 @@ import React, {
 
 import { createStyles, withStyles, Theme } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import ErrorDisplay from "../UI-Toolkit/ErrorDisplay";
 import { map, filter } from "lodash";
+import styled from "styled-components";
 
 interface IProps {
   // TODO: Make a type alias for this.
@@ -37,30 +38,57 @@ const ValidatedInput: SFC<IProps> = (props) => {
   }
 
   return (
-    <div>
-      <InputLabel>{props.label}</InputLabel>
-      <FormControl>
-        <Input
-          value={props.value}
-          onChange={changeHandler}
-          onBlur={onBlurHandler}
-          error={props.errors != null && props.errors.length > 0}
-        />
-        {<ErrorDisplay
-          fieldName={props.label} // TODO this could be a problem. Address that names might clash.
-          errors={props.errors} />
-        }
-      </FormControl>
-    </div>
+    <InputContainer>
+      <LabelContainer>
+        <FormLabel className={props.classes.inputLabel}>{props.label}</FormLabel>
+      </LabelContainer>
+      <FormControlContainer>
+        <FormControl fullWidth={true}>
+          <Input
+            value={props.value}
+            fullWidth={true}
+            onChange={changeHandler}
+            onBlur={onBlurHandler}
+            error={props.errors != null && props.errors.length > 0}
+            classes={{ input: props.classes.input }}
+          />
+          {<ErrorDisplay
+            fieldName={props.label} // TODO this could be a problem. Address that names might clash.
+            errors={props.errors} />
+          }
+        </FormControl>
+      </FormControlContainer>
+    </InputContainer>
   );
 }
 
 const styles = ({ spacing }: Theme) => createStyles({
-  textField: {
+  input: {
+    fontSize: 14,
+    padding: 0,
+    paddingBottom: 2,
+
+  },
+  inputLabel: {
+    fontSize: 12,
     marginLeft: spacing.unit,
-    marginRight: spacing.unit,
-    width: 200,
+    marginRight: 10,
   }
 })
+
+const InputContainer = styled.div`
+  margin-top: 5px;
+  display: flex;
+`;
+
+const LabelContainer = styled.div`
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+`;
+
+const FormControlContainer = styled.div`
+  flex-grow: 1
+`;
 
 export default withStyles(styles)(ValidatedInput);
