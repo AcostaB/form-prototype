@@ -46,7 +46,7 @@ const Form1: SFC<IProps> = (props) => {
         validators={[required, maxLength(20)]}
       />
       <ValidatedInput
-        value={props.email}
+        value={props.dateOfBirth}
         fieldName="dateOfBirth"
         label="Date of Birth: "
         onFieldChange={props.onFieldChange("dateOfBirth")}
@@ -55,7 +55,7 @@ const Form1: SFC<IProps> = (props) => {
         validators={[required, maxLength(20)]}
       />
       <ValidatedInput
-        value={props.email}
+        value={props.gender}
         fieldName="gender"
         label="Gender: "
         onFieldChange={props.onFieldChange("gender")}
