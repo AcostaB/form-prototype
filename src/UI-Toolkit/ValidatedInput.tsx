@@ -11,16 +11,17 @@ import { map, filter } from "lodash";
 import styled from "styled-components";
 
 interface IProps {
-  // TODO: Make a type alias for this.
-  fieldName: string;
-  value: string | number;
-  label: string;
-  onFieldChange: (newValue: any) => void,
-  onValidationChange: (newErrors: string[]) => void,
   // TODO: fix this any
   classes: any,
   errors?: string[] | null | undefined,
-  validators: Validator[]
+  // TODO: Make a type alias for this. Use generic at the highest level and have that be used for this field?
+  fieldName: string,
+  label: string,
+  // TODO: Same thing here. I should be able to make it into a generic that can infer this.
+  onFieldChange: (newValue: any) => void,
+  onValidationChange: (newErrors: string[]) => void,
+  validators: Validator[],
+  value: string | number;
 }
 
 const ValidatedInput: SFC<IProps> = (props) => {
@@ -32,6 +33,7 @@ const ValidatedInput: SFC<IProps> = (props) => {
   }
 
   const onBlurHandler = () => {
+    console.log("on blur fired");
     const errors: string[] = filter(map(props.validators, validator => validator(props.value)), error => error !== null && error !== undefined) as string[];
 
     props.onValidationChange(errors);
@@ -45,15 +47,14 @@ const ValidatedInput: SFC<IProps> = (props) => {
       <FormControlContainer>
         <FormControl fullWidth={true}>
           <Input
-            value={props.value}
-            fullWidth={true}
-            onChange={changeHandler}
-            onBlur={onBlurHandler}
-            error={props.errors != null && props.errors.length > 0}
             classes={{ input: props.classes.input }}
+            error={props.errors != null && props.errors.length > 0}
+            fullWidth={true}
+            onBlur={onBlurHandler}
+            onChange={changeHandler}
+            value={props.value}
           />
           {<ErrorDisplay
-            fieldName={props.label} // TODO this could be a problem. Address that names might clash.
             errors={props.errors} />
           }
         </FormControl>

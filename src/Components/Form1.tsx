@@ -7,6 +7,7 @@ import { required, maxLength, email } from "../Validators/Validators";
 
 interface IProps extends IPerson {
   // TODO: Make a type alias for this.
+  // TODO: this new value can be types. Could possibly type the whole function. 
   onFieldChange: (name: Key<IPerson>) => (newValue: any) => void,
   onValidationChange: (name: Key<IPerson>) => (newErrors: string[]) => void,
   // TODO: fix this any
