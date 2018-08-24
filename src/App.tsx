@@ -1,99 +1,94 @@
 import './App.css';
-import Form1 from "./Components/Form1";
-// import Form2 from "./Components/Form2";
+import SOVForm, { ISOVFormEntities, ISOVFormErrors } from "./Components/SOVForm";
 import logo from './logo.svg';
 import * as React from 'react';
 import styled from "styled-components";
+import { normalize } from "normalizr";
+import { building as buildingSchema } from "./Schemas/Buildings";
+import { buildingData } from "./Data/Buildings";
+import { mapValues } from "lodash";
 
+// TODO better handle these optional parameters. Should they be optional?
+// TODO Better type the contexts parameter
 interface IState {
-  person: IPerson,
-  dog: IDog,
-  form1: {
-    errors: KeyedErrors<IPerson>
-  },
-  form2: {
-    errors: KeyedErrors<IDog>
+  entities?: {}
+  contexts: {
+    sovForm: {
+      entities: ISOVFormEntities
+    },
+    sovFormErrors: {
+      entities: ISOVFormErrors
+    }
   }
 }
 
 class App extends React.Component<{}, IState> {
+
   constructor(props: {}) {
     super(props);
 
     this.state = {
-      dog: {
-        age: 0,
-        breed: '',
-        name: '',
-        size: ''
-      },
-      form1: {
-        errors: {}
-      },
-      form2: {
-        errors: {}
-      },
-      person: {
-        age: 0,
-        dateOfBirth: '',
-        email: '',
-        gender: '',
-        name: ''
+      contexts: {
+        sovForm: { entities: fetchBuildings() },
+        sovFormErrors: { entities: createErrorsObject(fetchBuildings()) }
       }
     };
   };
 
-  public handlePersonFieldChange = (name: Key<IPerson>) => {
-    return (newValue: any) => {
-      this.setState(prevState => (
-        {
-          ...prevState,
-          person: {
-            ...prevState.person,
-            [name]: newValue
-          }
-        }
-      ));
-    };
-  };
+  // TODO: Issues: 
+  //    1. field needs better typing. 
+  //    2. when doing validation change, i can modify more than one field at a time. 
+  //  X 3. Need to specify the id of the field.
+  //    4. I'm passing in errors, but it might be a new value or an array of errors.
+  //    5. New value is of type any. 
+  public handleChange = (context: ("SOVForm" | "SOVFormErrors" | null)) => {
+    // If no context, then changes are to root level entities.
+    if (context === null) {
+      // TODO: need to better type this. Can scope to entities at the root level.
+      return (entity: ("apartments" | "buildings" | "people")) => {
+        return (field: string, id: number) => {
+          // TODO: use generics to better identify the type of the new value.
+          return (newValue: any) =>
+            this.setState(prevState => (
+              {
+                ...prevState,
+                [entity]: {
+                  ...prevState[entity],
+                  [id]: {
+                    ...prevState[entity][id],
+                    [field]: newValue
+                  }
+                }
+              }
+            ));
+        };
+      };
+    }
 
-  public handlePersonValidationChange = (name: Key<IPerson>) => {
-    return (newErrors: string[]) => {
-      this.setState(prevState => (
-        {
-          ...prevState,
-          form1: {
-            ...prevState.form1,
-            errors: {
-              ...prevState.form1.errors,
-              [name]: newErrors
+    // If context is provided, then entities are scoped 
+    // TODO: need to better type this. Can scope to entities at the context level.
+    return (entity: ("apartments" | "buildings" | "people")) => {
+      return (field: string, id: number) => {
+        // TODO: use generics to better identify the type of the new value.
+        return (newValue: any) =>
+          this.setState(prevState => (
+            {
+              ...prevState,
+              [context]: {
+                ...prevState[context],
+                [entity]: {
+                  ...prevState[context][entity],
+                  [id]: {
+                    ...prevState[context][entity][id],
+                    [field]: newValue
+                  }
+                }
+              }
             }
-          }
-        }
-      ));
+          ));
+      };
     };
   };
-
-  // public handleDogFieldChange = (name: Key<IDog>) => {
-  //   return (newValue: any, newErrors: string[]) => {
-  //     this.setState(prevState => (
-  //       {
-  //         ...prevState,
-  //         dog: {
-  //           ...prevState.dog,
-  //           [name]: newValue
-  //         },
-  //         form2: {
-  //           ...prevState.form2,
-  //           errors: {
-  //             ...prevState.form2.errors,
-  //             [name]: newErrors
-  //           }
-  //         },
-  //       }
-  //     ));
-  //   };
-  // };
 
   public render() {
     return (
@@ -102,20 +97,13 @@ class App extends React.Component<{}, IState> {
           <Logo src={logo} alt="logo" />
           <Title className="App-title">Welcome to React</Title>
         </Header>
-        <Form1
-          {...this.state.person}
-          onFieldChange={this.handlePersonFieldChange}
-          onValidationChange={this.handlePersonValidationChange}
-          errors={this.state.form1.errors}
+        <SOVForm
+          onFieldChange={this.handleChange("SOVForm")}
+          onValidationChange={this.handleChange("SOVFormErrors")}
+          onSingleValidationChange={this.handleChange("SOVFormErrors")}
+          entities={this.state.contexts.sovForm.entities}
+          errors={this.state.contexts.sovFormErrors.entities}
         />
-        {/* <Form2
-          age={this.state.dog.age}
-          breed={this.state.dog.breed}
-          name={this.state.dog.name}
-          onFieldChange={this.handleDogFieldChange}
-          size={this.state.dog.size}
-          errors={this.state.form2.errors}
-        /> */}
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       </div>
     );
@@ -123,6 +111,16 @@ class App extends React.Component<{}, IState> {
 }
 
 export default App;
+
+const fetchBuildings = (): ISOVFormEntities => {
+  const result = normalize(buildingData, [buildingSchema])
+  console.dir(result);
+  return result.entities as ISOVFormEntities;
+}
+
+const createErrorsObject = (entities: ISOVFormEntities): ISOVFormErrors => {
+  return mapValues(entities, entity => mapValues(entity, id => mapValues(id, property => null))) as ISOVFormErrors;
+}
 
 const Logo = styled.img` 
   animation: App-logo-spin infinite 20s linear;

@@ -2,22 +2,22 @@ import React, {
   SFC
 } from 'react';
 import styled from "styled-components";
-import ValidatedInput from "../UI-Toolkit/ValidatedInput";
-import { required, maxLength, email } from "../Validators/Validators";
+// import ValidatedInput from "../UI-Toolkit/ValidatedInput";
+// import { required, maxLength, email } from "../Validators/Validators";
 
-interface IProps extends IPerson {
-  // TODO: Make a type alias for this.
-  // TODO: this new value can be types. Could possibly type the whole function. 
-  onFieldChange: (name: Key<IPerson>) => (newValue: any) => void,
-  onValidationChange: (name: Key<IPerson>) => (newErrors: string[]) => void,
-  // TODO: fix this any
-  errors: KeyedErrors<IPerson>
-}
+// interface IProps extends IPerson {
+//   // TODO: Make a type alias for this.
+//   // TODO: this new value can be types. Could possibly type the whole function. 
+//   onFieldChange: (name: Key<IPerson>) => (newValue: any) => void,
+//   onValidationChange: (name: Key<IPerson>) => (newErrors: string[]) => void,
+//   // TODO: fix this any
+//   errors: KeyedErrors<IPerson>
+// }
 
-const Form1: SFC<IProps> = (props) => {
+const Form1: SFC<any> = (props) => {
   return (
     <Form1Container>
-      <ValidatedInput
+      {/* <ValidatedInput
         value={props.name}
         fieldName="name"
         label="Name: "
@@ -61,7 +61,7 @@ const Form1: SFC<IProps> = (props) => {
         onValidationChange={props.onValidationChange("gender")}
         errors={props.errors.gender}
         validators={[required, maxLength(20)]}
-      />
+      /> */}
     </Form1Container>
   );
 }

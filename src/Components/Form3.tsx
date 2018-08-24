@@ -1,8 +1,8 @@
 import React, {
   SFC
 } from 'react';
-import { required, maxLength } from "../Validators/Validators";
-import Form from "./Form";
+// import { required, maxLength } from "../Validators/Validators";
+// import Form from "./Form";
 
 interface IProps extends IPerson {
   // TODO: Make a type alias for this.
@@ -11,13 +11,13 @@ interface IProps extends IPerson {
   onValidationChange: (fields: { [name: string]: string[] }) => void,
   onSingleValidationChange: (name: Key<IPerson>) => (newErrors: string[]) => void,
   // TODO: fix this any
-  errors: KeyedErrors<IPerson>
+  // errors: KeyedErrors<IPerson>
 }
 
 const Form3: SFC<IProps> = (props) => {
   return (
     <div>
-      <Form {...props}>
+      {/* <Form {...props}>
         {({ ValidatedInput, Button }) =>
           <div>
             <ValidatedInput
@@ -59,7 +59,7 @@ const Form3: SFC<IProps> = (props) => {
 
           </div>
         }
-      </Form>
+      </Form> */}
     </div>
   );
 }

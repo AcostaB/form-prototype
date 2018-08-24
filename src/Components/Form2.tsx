@@ -3,20 +3,20 @@ import React, {
 } from 'react';
 import styled from "styled-components";
 
-import { createStyles, TextField, withStyles, Theme } from "@material-ui/core";
+import { createStyles, withStyles, Theme } from "@material-ui/core";
 
-interface IProps extends IDog {
-  // TODO: Make a type alias for this.
-  onFieldChange: (name: Key<IDog>) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void,
-  // TODO: fix this any
-  classes: any,
-  errors: KeyedErrors<IDog>
-}
+// interface IProps extends IDog {
+//   // TODO: Make a type alias for this.
+//   onFieldChange: (name: Key<IDog>) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void,
+//   // TODO: fix this any
+//   classes: any,
+//   errors: KeyedErrors<IDog>
+// }
 
-const Form2: SFC<IProps> = (props) => {
+const Form2: SFC<any> = (props) => {
   return (
     <Form2Container>
-      <TextField
+      {/* <TextField
         label="Name: "
         value={props.name}
         onChange={props.onFieldChange('name')}
@@ -39,7 +39,7 @@ const Form2: SFC<IProps> = (props) => {
         value={props.size}
         onChange={props.onFieldChange('size')}
         className={props.classes.textField}
-      />
+      /> */}
     </Form2Container>
   );
 }

@@ -10,12 +10,11 @@ import ErrorDisplay from "../UI-Toolkit/ErrorDisplay";
 import { map, filter } from "lodash";
 import styled from "styled-components";
 
-interface IProps {
+export interface IProps {
   // TODO: fix this any
   classes: any,
   errors?: string[] | null | undefined,
   // TODO: Make a type alias for this. Use generic at the highest level and have that be used for this field?
-  fieldName: string,
   label: string,
   // TODO: Same thing here. I should be able to make it into a generic that can infer this.
   onFieldChange: (newValue: any) => void,
