@@ -41,7 +41,7 @@ const ValidatedInput: SFC<IProps> = (props) => {
   return (
     <InputContainer>
       <LabelContainer>
-        <FormLabel className={props.classes.inputLabel}>{props.label}</FormLabel>
+        <FormLabel className={props.classes.inputLabel}><Label>{`${props.label}: `}</Label></FormLabel>
       </LabelContainer>
       <FormControlContainer>
         <FormControl fullWidth={true}>
@@ -89,6 +89,12 @@ const LabelContainer = styled.div`
 
 const FormControlContainer = styled.div`
   flex-grow: 1
+`;
+
+const Label = styled.span`
+  &::first-letter {
+    text-transform: uppercase;
+  }
 `;
 
 export default withStyles(styles)(ValidatedInput);

@@ -11,7 +11,7 @@ import { mapValues } from "lodash";
 // TODO better handle these optional parameters. Should they be optional?
 // TODO Better type the contexts parameter
 interface IState {
-  entities?: {}
+  entities: {}
   contexts: {
     sovForm: {
       entities: ISOVFormEntities
@@ -28,6 +28,7 @@ class App extends React.Component<{}, IState> {
     super(props);
 
     this.state = {
+      entities: {},
       contexts: {
         sovForm: { entities: fetchBuildings() },
         sovFormErrors: { entities: createErrorsObject(fetchBuildings()) }
@@ -41,7 +42,7 @@ class App extends React.Component<{}, IState> {
   //  X 3. Need to specify the id of the field.
   //    4. I'm passing in errors, but it might be a new value or an array of errors.
   //    5. New value is of type any. 
-  public handleChange = (context: ("SOVForm" | "SOVFormErrors" | null)) => {
+  public handleChange = (context: ("sovForm" | "sovFormErrors" | null)) => {
     // If no context, then changes are to root level entities.
     if (context === null) {
       // TODO: need to better type this. Can scope to entities at the root level.
@@ -49,18 +50,21 @@ class App extends React.Component<{}, IState> {
         return (field: string, id: number) => {
           // TODO: use generics to better identify the type of the new value.
           return (newValue: any) =>
-            this.setState(prevState => (
-              {
+            this.setState(prevState => {
+              return {
                 ...prevState,
-                [entity]: {
-                  ...prevState[entity],
-                  [id]: {
-                    ...prevState[entity][id],
-                    [field]: newValue
+                entities: {
+                  ...prevState.entities,
+                  [entity]: {
+                    ...prevState.entities[entity],
+                    [id]: {
+                      ...prevState.entities[entity][id],
+                      [field]: newValue
+                    }
                   }
                 }
               }
-            ));
+            });
         };
       };
     }
@@ -71,21 +75,28 @@ class App extends React.Component<{}, IState> {
       return (field: string, id: number) => {
         // TODO: use generics to better identify the type of the new value.
         return (newValue: any) =>
-          this.setState(prevState => (
-            {
+          this.setState(prevState => {
+            return {
               ...prevState,
-              [context]: {
-                ...prevState[context],
-                [entity]: {
-                  ...prevState[context][entity],
-                  [id]: {
-                    ...prevState[context][entity][id],
-                    [field]: newValue
+              contexts: {
+                ...prevState.contexts,
+                [context]: {
+                  ...prevState.contexts[context],
+                  entities: {
+                    ...prevState.contexts[context].entities,
+                    [entity]: {
+                      ...prevState.contexts[context].entities[entity],
+                      [id]: {
+                        ...prevState.contexts[context].entities[entity][id],
+                        [field]: newValue
+                      }
+                    }
                   }
                 }
               }
             }
-          ));
+          }
+          );
       };
     };
   };
@@ -98,9 +109,9 @@ class App extends React.Component<{}, IState> {
           <Title className="App-title">Welcome to React</Title>
         </Header>
         <SOVForm
-          onFieldChange={this.handleChange("SOVForm")}
-          onValidationChange={this.handleChange("SOVFormErrors")}
-          onSingleValidationChange={this.handleChange("SOVFormErrors")}
+          onFieldChange={this.handleChange("sovForm")}
+          onValidationChange={this.handleChange("sovFormErrors")}
+          onSingleValidationChange={this.handleChange("sovFormErrors")}
           entities={this.state.contexts.sovForm.entities}
           errors={this.state.contexts.sovFormErrors.entities}
         />

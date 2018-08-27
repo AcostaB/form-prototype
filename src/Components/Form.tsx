@@ -1,5 +1,5 @@
 import React from 'react';
-import { default as VI, IProps as IInputProps } from "../UI-Toolkit/ValidatedInput";
+import { default as VI } from "../UI-Toolkit/ValidatedInput";
 // import { filter, map, mapValues } from "lodash";
 
 // TODO: Work on making this generic.
@@ -20,7 +20,7 @@ class Form extends React.Component<{}, {}> {
 
   public ValidatedInput = (cProps: IValidatedInputProps) => {
     this.fieldValidators = { ...this.fieldValidators, [cProps.fieldName]: cProps.validators };
-    return <VI {...cProps} />
+    return <VI {...cProps} label={cProps.label !== undefined ? cProps.label : cProps.fieldName} />
   }
 
   // TODO drastically need to improve on this.
@@ -39,6 +39,16 @@ class Form extends React.Component<{}, {}> {
 
 export default Form;
 
-interface IValidatedInputProps extends IInputProps {
+interface IValidatedInputProps {
+  // TODO: fix this any
+  classes: any,
+  errors?: string[] | null | undefined,
   fieldName: string
+  // TODO: Make a type alias for this. Use generic at the highest level and have that be used for this field?
+  label?: string,
+  // TODO: Same thing here. I should be able to make it into a generic that can infer this.
+  onFieldChange: (newValue: any) => void,
+  onValidationChange: (newErrors: string[]) => void,
+  validators: Validator[],
+  value: string | number,
 }

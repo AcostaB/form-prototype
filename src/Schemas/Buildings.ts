@@ -10,7 +10,7 @@ export const apartment = new schema.Entity("apartments", {
 export const address = new schema.Entity("addresses", {}, { idAttribute: "addressID" });
 
 export const building = new schema.Entity("buildings", {
-  address: address,
+  address,
   apartments: [apartment]
 }, { idAttribute: "buildingID" })
 
