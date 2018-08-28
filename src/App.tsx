@@ -6,7 +6,8 @@ import styled from "styled-components";
 import { normalize } from "normalizr";
 import { building as buildingSchema } from "./Schemas/Buildings";
 import { buildingData } from "./Data/Buildings";
-import { mapValues } from "lodash";
+import { mapValues, keyBy } from "lodash";
+import { BuildingNormalized } from "./Models/Building";
 
 // TODO better handle these optional parameters. Should they be optional?
 // TODO Better type the contexts parameter
@@ -101,6 +102,51 @@ class App extends React.Component<{}, IState> {
     };
   };
 
+  // TODO: fix this any
+  public validateAllHandler = newErrors => {
+    this.setState((prevState: IState): any => (
+      {
+        ...prevState,
+        contexts: {
+          ...prevState.contexts,
+          sovFormErrors: {
+            entities: newErrors
+          }
+        }
+      })
+    );
+  };
+
+  public clearFormHandler = () => {
+    const emptyBuilding: IBuildingNormalized = new BuildingNormalized();
+    const emptyBuildingErrors: Errors<IBuilding> = {
+      construction: undefined,
+      name: undefined,
+      website: undefined
+    }
+
+    // TODO: fix this any
+    this.setState((prevState: IState): any => (
+      {
+        ...prevState,
+        contexts: {
+          sovForm: {
+            entities: {
+              buildings: keyBy([emptyBuilding], "buildingID")
+            }
+          },
+          sovFormErrors: {
+            entities: {
+              buildings: {
+                [emptyBuilding.buildingID]: emptyBuildingErrors
+              }
+            }
+          }
+        }
+      })
+    );
+  };
+
   public render() {
     return (
       <div>
@@ -111,9 +157,10 @@ class App extends React.Component<{}, IState> {
         <SOVForm
           onFieldChange={this.handleChange("sovForm")}
           onValidationChange={this.handleChange("sovFormErrors")}
-          onSingleValidationChange={this.handleChange("sovFormErrors")}
           entities={this.state.contexts.sovForm.entities}
           errors={this.state.contexts.sovFormErrors.entities}
+          validateAllHandler={this.validateAllHandler}
+          clearFormHandler={this.clearFormHandler}
         />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       </div>

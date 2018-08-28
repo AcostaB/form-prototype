@@ -35,16 +35,16 @@ interface IApartmentNormalized {
 interface IBuilding {
   buildingID: number,
   name: string,
-  construction: ("wood" | "concrete"),
+  construction: ("wood" | "concrete" | ""),
   website: string,
-  address: IAddress,
-  apartments: IApartment[]
+  address?: IAddress,
+  apartments?: IApartment[]
 }
 
 interface IBuildingNormalized {
   buildingID: number,
   name: string,
-  construction: ("wood" | "concrete"),
+  construction: ("wood" | "concrete" | ""),
   website: string,
   address: number,
   apartments: number[]
@@ -71,3 +71,5 @@ interface IFieldChange {
   fieldName: string,
   newValue: any
 }
+
+// TODO make a type for normalized entities!
