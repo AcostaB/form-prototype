@@ -1,4 +1,4 @@
-import { mapValues } from "lodash";
+import { isEmpty, filter, map, mapValues } from "lodash";
 
 let counter = 0;
 
@@ -8,35 +8,61 @@ export const newUniqueID = () => {
 }
 
 // TODO fix these anys
-export const mapEntitiesToErrors = (entities: any): any => {
-  return (
-    mapValues(entities, entity =>
-      mapValues(entity, id =>
-        mapValues(entity[id], entityField => undefined)
-      )
-    )
-  );
-};
+// export const mapEntitiesToErrors = (entities: any): any => {
+//   const result = mapValues(entities, entity =>
+//     mapValues(entity, id =>
+//       mapValues(entity[id], entityField => [])
+//     )
+//   );
+
+//   return result;
+// };
 
 // TODO fix these anys
-export const mapEntitiesToValidators = (entities: any): any => {
-  return (
-    mapValues(entities, entity =>
-      mapValues(entity, id =>
-        mapValues(entity[id], entityField => [])
-      )
-    )
-  );
-};
+// export const mapEntitiesToValidators = (entities: any): any => {
+//   const result = mapValues(entities, entity =>
+//     mapValues(entity, id =>
+//       mapValues(entity[id], entityField => [])
+//     )
+//   );
+
+//   return result;
+// };
 
 // TODO fix these anys
 export const mapValidatorsToErrors = (validators: any, values: any): any => {
-  return (
-    mapValues(validators, entity =>
-      mapValues(entity, id =>
-        mapValues(entity[id], entityField =>
-          mapValues(entityField, validator => validator(values[entity][id][entityField])))
-      )
+  const result = mapValues(values, (entityObjects, entityName) =>
+    mapValues(entityObjects, (entityObject, objectID) =>
+      mapValues(entityObject, (fieldValue, field) => {
+        if (validators[entityName] && validators[entityName][objectID] && validators[entityName][objectID][field]) {
+          return filter(map(validators[entityName][objectID][field], validator =>
+            validator(fieldValue)), error => error);
+        } else {
+          return [];
+        }
+      })
     )
   );
+
+  return result;
 };
+
+// TODO fix these anys
+export const addOrEditEntity = (prevEntityCollection, entity, id, field, value) => {
+  // Prevent references to undefined objects.
+  const entityCollectionToSpread = !isEmpty(prevEntityCollection[entity]) ? prevEntityCollection[entity] : {};
+  const entityObjectToSpread = !isEmpty(entityCollectionToSpread) ? prevEntityCollection[entity][id] : {};
+
+  const newEntityCollection = {
+    ...prevEntityCollection,
+    [entity]: {
+      ...entityCollectionToSpread,
+      [id]: {
+        ...entityObjectToSpread,
+        [field]: value
+      }
+    }
+  };
+
+  return newEntityCollection;
+}

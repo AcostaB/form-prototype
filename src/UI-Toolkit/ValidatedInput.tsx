@@ -67,7 +67,6 @@ const styles = ({ spacing }: Theme) => createStyles({
     fontSize: 14,
     padding: 0,
     paddingBottom: 2,
-
   },
   inputLabel: {
     fontSize: 12,
@@ -78,7 +77,8 @@ const styles = ({ spacing }: Theme) => createStyles({
 
 const InputContainer = styled.div`
   margin-top: 5px;
-  display: flex;
+  display: inline-flex;
+  width: 300px;
 `;
 
 const LabelContainer = styled.div`

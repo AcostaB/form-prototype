@@ -35,6 +35,7 @@ const SOVForm: SFC<IProps> = (props) => {
       {/* TODO: Generic type for the form. */}
       <Form
         entities={props.entities}
+        errors={props.errors}
         validateAll={props.validateAllHandler}
         clearForm={props.clearFormHandler}
         onFieldChange={props.onFieldChange}
@@ -44,94 +45,77 @@ const SOVForm: SFC<IProps> = (props) => {
           <FormContents>
             {map(data.buildings, building =>
               <BuildingRow key={`building_${building.buildingID}`}>
-                <BuildingColumn>
+                <BuildingRow>
                   <Header>Building</Header>
                   <ValidatedInput
                     fieldName="name"
                     entity="buildings"
                     id={building.buildingID}
-                    errors={props.errors.buildings[building.buildingID].name}
-                    validators={[required, maxLength(20)]}
-                  />
-                  {/* <ValidatedInput
-                    value={building.construction}
-                    fieldName="construction"
-                    onFieldChange={props.onFieldChange("buildings")("construction", building.buildingID)}
-                    onValidationChange={props.onValidationChange("buildings")("construction", building.buildingID)}
-                    errors={props.errors.buildings[building.buildingID].construction}
                     validators={[required, maxLength(20)]}
                   />
                   <ValidatedInput
-                    value={building.website}
-                    fieldName="website"
-                    onFieldChange={props.onFieldChange("buildings")("website", building.buildingID)}
-                    onValidationChange={props.onValidationChange("buildings")("website", building.buildingID)}
-                    errors={props.errors.buildings[building.buildingID].website}
+                    fieldName="construction"
+                    entity="buildings"
+                    id={building.buildingID}
                     validators={[required, maxLength(20)]}
-                  /> */}
-                </BuildingColumn>
-                {/* <ApartmentColumn>
+                  />
+                  <ValidatedInput
+                    fieldName="website"
+                    entity="buildings"
+                    id={building.buildingID}
+                    validators={[required, maxLength(20)]}
+                  />
+                </BuildingRow>
+                <ApartmentRows>
                   {map(building.apartments, apartment => (
                     <div key={apartment.apartmentID}>
                       <Header>Apartment</Header>
                       <ValidatedInput
-                        value={apartment.apartmentNumber}
                         fieldName="apartmentNumber"
-                        label="Apt #: "
-                        onFieldChange={props.onFieldChange("apartments")("apartmentNumber", apartment.apartmentID)}
-                        onValidationChange={props.onValidationChange("apartments")("apartmentNumber", apartment.apartmentID)}
-                        errors={props.errors.apartments[apartment.apartmentID].apartmentNumber}
+                        label="Apt #"
+                        entity="apartments"
+                        id={apartment.apartmentID}
                         validators={[required, maxLength(20)]}
                       />
+                      <Header>Tenants</Header>
                       {map(apartment.tenants, tenant => (
                         <div key={tenant.personID}>
-                          <Header>Tenant</Header>
                           <ValidatedInput
-                            value={tenant.name}
                             fieldName="name"
-                            onFieldChange={props.onFieldChange("people")("name", tenant.personID)}
-                            onValidationChange={props.onValidationChange("people")("name", tenant.personID)}
-                            errors={props.errors.people[tenant.personID].name}
+                            entity="people"
+                            id={tenant.personID}
                             validators={[required, maxLength(20)]}
                           />
                           <ValidatedInput
-                            value={tenant.age}
                             fieldName="age"
-                            onFieldChange={props.onFieldChange("people")("age", tenant.personID)}
-                            onValidationChange={props.onValidationChange("people")("age", tenant.personID)}
-                            errors={props.errors.people[tenant.personID].age}
+                            entity="people"
+                            id={tenant.personID}
                             validators={[required, maxLength(20)]}
                           />
                           <ValidatedInput
-                            value={tenant.dateOfBirth}
                             fieldName="dateOfBirth"
                             label="Date of Birth"
-                            onFieldChange={props.onFieldChange("people")("dateOfBirth", tenant.personID)}
-                            onValidationChange={props.onValidationChange("people")("dateOfBirth", tenant.personID)}
-                            errors={props.errors.people[tenant.personID].dateOfBirth}
+                            entity="people"
+                            id={tenant.personID}
                             validators={[required, maxLength(20)]}
                           />
                           <ValidatedInput
-                            value={tenant.email}
                             fieldName="email"
-                            onFieldChange={props.onFieldChange("people")("email", tenant.personID)}
-                            onValidationChange={props.onValidationChange("people")("email", tenant.personID)}
-                            errors={props.errors.people[tenant.personID].email}
+                            entity="people"
+                            id={tenant.personID}
                             validators={[required, maxLength(20)]}
                           />
                           <ValidatedInput
-                            value={tenant.gender}
                             fieldName="gender"
-                            onFieldChange={props.onFieldChange("people")("gender", tenant.personID)}
-                            onValidationChange={props.onValidationChange("people")("gender", tenant.personID)}
-                            errors={props.errors.people[tenant.personID].gender}
+                            entity="people"
+                            id={tenant.personID}
                             validators={[required, maxLength(20)]}
                           />
                         </div>
                       ))}
                     </div>
                   ))}
-                </ApartmentColumn> */}
+                </ApartmentRows>
               </BuildingRow>
             )}
             <SubmitButton />
@@ -150,20 +134,13 @@ const FormContents = styled.div`
 `;
 
 const BuildingRow = styled.div`
-  display: block
-`;
-
-const BuildingColumn = styled.div`
-  display: inline-block;
-  width: 300px;
   vertical-align: top;
 `;
 
-// const ApartmentColumn = styled.div`
-//   display: inline-block;
-//   width: 300px;
-//   vertical-align: top;
-// `;
+const ApartmentRows = styled.div`
+  vertical-align: top;
+  
+`;
 
 const Header = styled.div`
   font-size: 14px;

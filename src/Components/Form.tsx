@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { default as VI } from "../UI-Toolkit/ValidatedInput";
-import { mapValidatorsToErrors, mapEntitiesToValidators } from "../Utils/Utils";
+import { addOrEditEntity, mapValidatorsToErrors } from "../Utils/Utils";
 // import { filter, map, mapValues } from "lodash";
 
 // TODO: Work on making this generic.
@@ -18,6 +18,8 @@ interface IProps {
   // TODO: fix this any
   entities: any,
   // TODO fix this any
+  errors: any,
+  // TODO fix this any
   validateAll: (newErrors: any) => void,
   onFieldChange: (entity: ("apartments" | "buildings" | "people")) => (field: string, id: number) => (newValue: any) => void,
   onValidationChange: (entity: ("apartments" | "buildings" | "people")) => (field: string, id: number) => (newValue: any) => void,
@@ -26,7 +28,7 @@ interface IProps {
 }
 
 class Form extends React.Component<IProps, {}> {
-  public fieldValidators = mapEntitiesToValidators(this.props.entities);
+  public fieldValidators = {};
 
   public SubmitButton = () => <button onClick={this.runAllValidators}>Submit</button>;
 
@@ -34,11 +36,13 @@ class Form extends React.Component<IProps, {}> {
 
   public ValidatedInput = (cProps: IValidatedInputProps) => {
     this.fieldValidators = { ...this.fieldValidators, [cProps.fieldName]: cProps.validators };
-    const { onFieldChange, onValidationChange, entities } = this.props;
-    const { errors, entity, fieldName, id, validators } = cProps;
+    const { onFieldChange, onValidationChange, entities, errors } = this.props;
+    const { entity, fieldName, id, validators } = cProps;
 
-    // Insert the validators 
-    this.fieldValidators[entity][id][fieldName] = validators;
+    console.log("this.fieldValidators: ", this.fieldValidators);
+
+    // Insert the validators. Function handles possible references to undefined objects.
+    this.fieldValidators = addOrEditEntity(this.fieldValidators, entity, id, fieldName, validators);
 
     return (
       <VI
@@ -47,7 +51,7 @@ class Form extends React.Component<IProps, {}> {
         label={cProps.label !== undefined ? cProps.label : cProps.fieldName}
         onFieldChange={onFieldChange(entity)(fieldName, id)}
         onValidationChange={onValidationChange(entity)(fieldName, id)}
-        errors={errors}
+        errors={errors[entity][id][fieldName]}
         validators={cProps.validators}
       />);
   }
@@ -57,6 +61,8 @@ class Form extends React.Component<IProps, {}> {
     // const newErrors = mapValues(this.fieldValidators, (validators, index) => filter(map(validators, validator => validator(this.props.model[index])), value => value !== null));
     // console.log(newErrors);
     // this.props.onValidationChange(newErrors);
+
+    console.log("this.props.entities", this.props.entities)
 
     const newErrors = mapValidatorsToErrors(this.fieldValidators, this.props.entities);
 
