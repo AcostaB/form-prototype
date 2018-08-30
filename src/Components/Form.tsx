@@ -1,11 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, SFC } from 'react';
 import { default as VI } from "../UI-Toolkit/ValidatedInput";
 import { mapValidatorsToErrors, mapEntitiesToValidators } from "../Utils/Utils";
 // import { filter, map, mapValues } from "lodash";
 
 // TODO: Work on making this generic.
 // interface IProps {
-// TODO: Make a type alias for this.
+// TODO: Make a type alias for 
 // TODO: this new value can be types. Could possibly type the whole function. 
 // TODO: If I normalize the data, I should be able to create a type that limits to the property names of 
 //   normalized objects.
@@ -25,23 +25,25 @@ interface IProps {
   children: ({ ValidatedInput, SubmitButton, ClearButton }) => ReactNode
 }
 
-class Form extends React.Component<IProps, {}> {
-  public fieldValidators = mapEntitiesToValidators(this.props.entities);
+export const Form: SFC<IProps> = (props) => {
+  const formValidators = mapEntitiesToValidators(props.entities);
 
-  public SubmitButton = () => <button onClick={this.runAllValidators}>Submit</button>;
+  const SubmitButton = () => <button onClick={runAllValidators}>Submit</button>;
 
-  public ClearButton = () => <button onClick={this.props.clearForm}>Clear</button>;
+  const ClearButton = () => <button onClick={props.clearForm}>Clear</button>;
 
-  public ValidatedInput = (cProps: IValidatedInputProps) => {
-    this.fieldValidators = { ...this.fieldValidators, [cProps.fieldName]: cProps.validators };
-    const { onFieldChange, onValidationChange, entities } = this.props;
+  const ValidatedInput = (cProps: IValidatedInputProps) => {
+    // fieldValidators = { ...fieldValidators, [cProps.fieldName]: cProps.validators };
+
+    const { onFieldChange, onValidationChange, entities } = props;
     const { errors, entity, fieldName, id, validators } = cProps;
 
     // Insert the validators 
-    this.fieldValidators[entity][id][fieldName] = validators;
+    formValidators[entity][id][fieldName] = validators;
 
     return (
       <VI
+        key={`${entity}_${id}_${fieldName}`}
         {...cProps}
         value={entities[entity][id][fieldName]}
         label={cProps.label !== undefined ? cProps.label : cProps.fieldName}
@@ -52,23 +54,23 @@ class Form extends React.Component<IProps, {}> {
       />);
   }
 
-  // TODO drastically need to improve on this.
-  public runAllValidators = () => {
-    // const newErrors = mapValues(this.fieldValidators, (validators, index) => filter(map(validators, validator => validator(this.props.model[index])), value => value !== null));
+  // TODO drastically need to improve on 
+  const runAllValidators = () => {
+    // const newErrors = mapValues(fieldValidators, (validators, index) => filter(map(validators, validator => validator(props.model[index])), value => value !== null));
     // console.log(newErrors);
-    // this.props.onValidationChange(newErrors);
+    // props.onValidationChange(newErrors);
 
-    const newErrors = mapValidatorsToErrors(this.fieldValidators, this.props.entities);
+    const newErrors = mapValidatorsToErrors(formValidators, props.entities);
 
-    this.props.validateAll(newErrors);
+    props.validateAll(newErrors);
   }
 
-  public render = () => (
+  return (
     <div>
-      {this.props.children({
-        ValidatedInput: this.ValidatedInput,
-        SubmitButton: this.SubmitButton,
-        ClearButton: this.ClearButton
+      {props.children({
+        ValidatedInput,
+        SubmitButton,
+        ClearButton
       })}
     </div>
   );
@@ -84,9 +86,9 @@ interface IValidatedInputProps {
   errors?: string[] | null | undefined,
   fieldName: string,
   id: number,
-  // TODO: Make a type alias for this. Use generic at the highest level and have that be used for this field?
+  // TODO: Make a type alias for  Use generic at the highest level and have that be used for this field?
   label?: string,
-  // TODO: Same thing here. I should be able to make it into a generic that can infer this.
+  // TODO: Same thing here. I should be able to make it into a generic that can infer 
   validators: Validator[],
   value: string | number,
 }

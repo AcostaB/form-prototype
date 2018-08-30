@@ -9,34 +9,34 @@ export const newUniqueID = () => {
 
 // TODO fix these anys
 export const mapEntitiesToErrors = (entities: any): any => {
-  return (
-    mapValues(entities, entity =>
-      mapValues(entity, id =>
-        mapValues(entity[id], entityField => undefined)
-      )
+  const result = mapValues(entities, entity =>
+    mapValues(entity, id =>
+      mapValues(entity[id], entityField => [])
     )
   );
+
+  return result;
 };
 
 // TODO fix these anys
 export const mapEntitiesToValidators = (entities: any): any => {
-  return (
-    mapValues(entities, entity =>
-      mapValues(entity, id =>
-        mapValues(entity[id], entityField => [])
-      )
+  const result = mapValues(entities, entity =>
+    mapValues(entity, id =>
+      mapValues(entity[id], entityField => [])
     )
   );
+
+  return result;
 };
 
 // TODO fix these anys
 export const mapValidatorsToErrors = (validators: any, values: any): any => {
-  return (
-    mapValues(validators, entity =>
-      mapValues(entity, id =>
-        mapValues(entity[id], entityField =>
-          mapValues(entityField, validator => validator(values[entity][id][entityField])))
-      )
+  const result = mapValues(validators, entity =>
+    mapValues(entity, id =>
+      mapValues(entity[id], entityField =>
+        mapValues(entityField, validator => validator(values[entity][id][entityField])))
     )
   );
+
+  return result;
 };

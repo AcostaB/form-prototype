@@ -1,16 +1,15 @@
-import React, {
-  SFC
-} from 'react';
+import React from 'react';
 
 import { createStyles, withStyles, Theme } from "@material-ui/core";
-import Input from '@material-ui/core/Input';
+// import Input from '@material-ui/core/Input';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import ErrorDisplay from "../UI-Toolkit/ErrorDisplay";
-import { map, filter } from "lodash";
+// import { map, filter } from "lodash";
 import styled from "styled-components";
 
 export interface IProps {
+  key?: string,
   // TODO: fix this any
   classes: any,
   errors?: string[] | null | undefined,
@@ -23,42 +22,48 @@ export interface IProps {
   value: string | number;
 }
 
-const ValidatedInput: SFC<IProps> = (props) => {
+class ValidatedInput extends React.Component<any>{
 
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  public changeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const newValue = event.target.value;
 
-    props.onFieldChange(newValue);
+    this.props.onFieldChange(newValue);
   }
 
-  const onBlurHandler = () => {
-    console.log("on blur fired");
-    const errors: string[] = filter(map(props.validators, validator => validator(props.value)), error => error !== null && error !== undefined) as string[];
+  // const onBlurHandler = () => {
+  //   console.log("on blur fired");
+  //   const errors: string[] = filter(map(props.validators, validator => validator(props.value)), error => error !== null && error !== undefined) as string[];
 
-    props.onValidationChange(errors);
-  }
+  //   props.onValidationChange(errors);
+  // }
 
-  return (
+  public render = () => (
     <InputContainer>
       <LabelContainer>
-        <FormLabel className={props.classes.inputLabel}><Label>{`${props.label}: `}</Label></FormLabel>
+        <FormLabel className={this.props.classes.inputLabel}><Label>{`${this.props.label}: `}</Label></FormLabel>
       </LabelContainer>
       <FormControlContainer>
         <FormControl fullWidth={true}>
-          <Input
+          {/* <Input
+            key={props.key}
             classes={{ input: props.classes.input }}
             error={props.errors != null && props.errors.length > 0}
             fullWidth={true}
             onBlur={onBlurHandler}
             onChange={changeHandler}
             value={props.value}
+          /> */}
+          <input
+            key={this.props.key}
+            value={this.props.value}
+            onChange={this.changeHandler}
           />
           {<ErrorDisplay
-            errors={props.errors} />
+            errors={this.props.errors} />
           }
         </FormControl>
       </FormControlContainer>
-    </InputContainer>
+    </InputContainer >
   );
 }
 
