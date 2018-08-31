@@ -1,6 +1,4 @@
-import React, {
-  SFC
-} from 'react';
+import React, { SFC } from "react";
 import { required, maxLength } from "../Validators/Validators";
 import Form from "./Form";
 import { map } from "lodash";
@@ -9,26 +7,28 @@ import { building as buildingSchema } from "../Schemas/Buildings";
 import { keys } from "lodash";
 import styled from "styled-components";
 
-
 interface IProps {
   // TODO: Make a type alias for this.
   // TODO: this new value can be types. Could possibly type the whole function.
-  entities: ISOVFormEntities,
-  errors: ISOVFormErrors,
-  onFieldChange: (entity: ("apartments" | "buildings" | "people")) => (field: string, id: number) => (newValue: any) => void,
-  onValidationChange: (entity: ("apartments" | "buildings" | "people")) => (field: string, id: number) => (newValue: any) => void,
+  entities: ISOVFormEntities;
+  errors: ISOVFormErrors;
+  onFieldChange: (
+    entity: "apartments" | "buildings" | "people"
+  ) => (field: string, id: number) => (newValue: any) => void;
+  onValidationChange: (
+    entity: "apartments" | "buildings" | "people"
+  ) => (field: string, id: number) => (newValue: any) => void;
   // TODO: fix this any
-  validateAllHandler: (newErrors: any) => void
-  clearFormHandler: () => void
+  validateAllHandler: (newErrors: any) => void;
+  clearFormHandler: () => void;
 }
 
-const SOVForm: SFC<IProps> = (props) => {
-
+const SOVForm: SFC<IProps> = props => {
   const data: { buildings: IBuilding[] } = denormalize(
     { buildings: keys(props.entities.buildings) },
     { buildings: [buildingSchema] },
     props.entities
-  )
+  );
 
   return (
     <div>
@@ -41,9 +41,9 @@ const SOVForm: SFC<IProps> = (props) => {
         onFieldChange={props.onFieldChange}
         onValidationChange={props.onValidationChange}
       >
-        {({ ValidatedInput, SubmitButton, ClearButton }) =>
+        {({ ValidatedInput, SubmitButton, ClearButton }) => (
           <FormContents>
-            {map(data.buildings, building =>
+            {map(data.buildings, building => (
               <BuildingRow key={`building_${building.buildingID}`}>
                 <BuildingRow>
                   <Header>Building</Header>
@@ -117,21 +117,19 @@ const SOVForm: SFC<IProps> = (props) => {
                   ))}
                 </ApartmentRows>
               </BuildingRow>
-            )}
+            ))}
             <SubmitButton />
             <ClearButton />
           </FormContents>
-        }
+        )}
       </Form>
     </div>
   );
-}
+};
 
 export default SOVForm;
 
-const FormContents = styled.div`
-  
-`;
+const FormContents = styled.div``;
 
 const BuildingRow = styled.div`
   vertical-align: top;
@@ -139,22 +137,9 @@ const BuildingRow = styled.div`
 
 const ApartmentRows = styled.div`
   vertical-align: top;
-  
 `;
 
 const Header = styled.div`
   font-size: 14px;
   color: grey;
 `;
-
-export interface ISOVFormEntities {
-  people: Keyed<IPersonNormalized>,
-  buildings: Keyed<IBuildingNormalized>,
-  apartments: Keyed<IApartmentNormalized>
-}
-
-export interface ISOVFormErrors {
-  people: Keyed<Errors<IPerson>>,
-  buildings: Keyed<Errors<IBuilding>>,
-  apartments: Keyed<Errors<IApartment>>
-}

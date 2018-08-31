@@ -18,7 +18,7 @@ export class Address implements IAddress {
   }
 }
 
-export class AddressNormalized implements IAddressNormalized {
+export class AddressNormalized implements Normalized<IAddress> {
   public addressID: number;
   public line1: string;
   public line2: string;

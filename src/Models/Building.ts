@@ -3,7 +3,7 @@ import { newUniqueID } from "../Utils/Utils";
 export class Building implements IBuilding {
   public buildingID: number;
   public name: string;
-  public construction: ("wood" | "concrete" | "");
+  public construction: "wood" | "concrete" | "";
   public website: string;
   public address: IAddress;
   public apartments: IApartment[];
@@ -16,10 +16,10 @@ export class Building implements IBuilding {
   }
 }
 
-export class BuildingNormalized implements IBuildingNormalized {
+export class BuildingNormalized implements Normalized<IBuilding> {
   public buildingID: number;
   public name: string;
-  public construction: ("wood" | "concrete" | "");
+  public construction: "wood" | "concrete" | "";
   public website: string;
   public address: number;
   public apartments: number[];
