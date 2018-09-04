@@ -8,6 +8,7 @@ import { building as buildingSchema } from "./Schemas/Buildings";
 import { buildingData } from "./Data/Buildings";
 import { mapValues, keyBy } from "lodash";
 import { BuildingNormalized } from "./Models/Building";
+import { changeHandlerBuilder } from "./Utils/Utils";
 
 class App extends React.Component<{}, IMainState> {
   constructor(props: {}) {
@@ -31,7 +32,7 @@ class App extends React.Component<{}, IMainState> {
         contexts: {
           ...prevState.contexts,
           sovForm: {
-            ...prevState.contexts.sovForm,
+            ...prevState.contexts!.sovForm,
             errors: newErrorsByEntity
           }
         }
@@ -67,6 +68,20 @@ class App extends React.Component<{}, IMainState> {
   };
 
   public render() {
+    const entities: ISOVFormEntities =
+      this.state.contexts !== undefined
+        && this.state.contexts.sovForm !== undefined
+        && this.state.contexts.sovForm.entities !== undefined
+        ? this.state.contexts.sovForm.entities
+        : {};
+
+    const errors: ISOVFormErrors =
+      this.state.contexts !== undefined
+        && this.state.contexts.sovForm !== undefined
+        && this.state.contexts.sovForm.errors !== undefined
+        ? this.state.contexts.sovForm.errors
+        : {};
+
     return (
       <div>
         <Header>
@@ -74,10 +89,10 @@ class App extends React.Component<{}, IMainState> {
           <Title className="App-title">Welcome to React</Title>
         </Header>
         <SOVForm
-          onFieldChange={this.handleChange("sovForm")}
-          onValidationChange={this.handleChange("sovFormErrors")}
-          entities={this.state.contexts.sovForm.entities}
-          errors={this.state.contexts.sovForm.errors}
+          onFieldChange={changeHandlerBuilder("sovForm")("entities")}
+          onValidationChange={changeHandlerBuilder("sovForm")("errors")}
+          entities={entities}
+          errors={errors}
           validateAllHandler={this.validateAllHandler}
           clearFormHandler={this.clearFormHandler}
         />

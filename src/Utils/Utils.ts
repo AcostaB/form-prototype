@@ -1,4 +1,3 @@
-import { changeHandlerBuilder } from "./Utils";
 import { isEmpty, filter, map, mapValues } from "lodash";
 
 let counter = 0;
@@ -7,28 +6,6 @@ export const newUniqueID = () => {
   counter -= 1;
   return counter;
 };
-
-// TODO fix these anys
-// export const mapEntitiesToErrors = (entities: any): any => {
-//   const result = mapValues(entities, entity =>
-//     mapValues(entity, id =>
-//       mapValues(entity[id], entityField => [])
-//     )
-//   );
-
-//   return result;
-// };
-
-// TODO fix these anys
-// export const mapEntitiesToValidators = (entities: any): any => {
-//   const result = mapValues(entities, entity =>
-//     mapValues(entity, id =>
-//       mapValues(entity[id], entityField => [])
-//     )
-//   );
-
-//   return result;
-// };
 
 // TODO fix these anys
 export const mapValidatorsToErrors = (validators: any, values: any): any => {
@@ -56,27 +33,28 @@ export const mapValidatorsToErrors = (validators: any, values: any): any => {
   return result;
 };
 
-type AddOrEditEntityField = <
-  C extends INormalizedEntities,
-  E extends Required<keyof C>,
-  I extends Required<keyof C[E]>,
-  F extends Required<keyof C[E][I]>,
-  V extends Required<C[E][I][F]>
->(
-  prevEntityCollection: C,
-  entity: E,
-  id: I,
-  field: F,
-  value: V
-) => C;
+// type AddOrEditEntityField = <
+//   C extends INormalizedEntities,
+//   E extends Required<keyof C>,
+//   I extends Required<keyof C[E]>,
+//   F extends Required<keyof C[E][I]>,
+//   V extends Required<C[E][I][F]>
+//   >(
+//   prevEntityCollection: C,
+//   entity: E,
+//   id: I,
+//   field: F,
+//   value: V
+// ) => C;
 
 // TODO fix these anys
-export const addOrEditEntityField: AddOrEditEntityField = (
-  prevEntityCollection,
-  entity,
-  id,
-  field,
-  value
+export const addOrEditEntityField: any = (
+  // export const addOrEditEntityField: AddOrEditEntityField = (
+  prevEntityCollection: any,
+  entity: any,
+  id: any,
+  field: any,
+  value: any
 ) => {
   // Prevent references to undefined objects.
   const entityCollectionToSpread = !isEmpty(prevEntityCollection[entity])
@@ -146,89 +124,4 @@ export const changeHandlerBuilder: ChangeHandlerBuilder = context => category =>
   };
 };
 
-const test = changeHandlerBuilder("sovForm")("entities")("buildings")(789);
-
-// If no context, then changes are to root level entities.
-// if (context === null) {
-//   // TODO: need to better type this. Can scope to entities at the root level.
-//   return (entity: "apartments" | "buildings" | "people") => {
-//     return (field: string, id: number) => {
-//       // TODO: use generics to better identify the type of the new value.
-//       return (newValue: any) =>
-//         this.setState((prevState: IMainState) => {
-//           return {
-//             ...prevState,
-//             entities: {
-//               ...prevState.entities,
-//               [entity]: {
-//                 ...prevState.entities[entity],
-//                 [id]: {
-//                   ...prevState.entities[entity][id],
-//                   [field]: newValue
-//                 }
-//               }
-//             }
-//           };
-//         });
-//     };
-//   };
-// }
-// export const changeHandlerBuilder: ChangeHandlerBuilder = (
-//   context: "sovForm" | "sovFormErrors" | null
-// ) => {
-//   // If no context, then changes are to root level entities.
-//   if (context === null) {
-//     // TODO: need to better type this. Can scope to entities at the root level.
-//     return (entity: "apartments" | "buildings" | "people") => {
-//       return (field: string, id: number) => {
-//         // TODO: use generics to better identify the type of the new value.
-//         return (newValue: any) =>
-//           this.setState((prevState: IMainState) => {
-//             return {
-//               ...prevState,
-//               entities: {
-//                 ...prevState.entities,
-//                 [entity]: {
-//                   ...prevState.entities[entity],
-//                   [id]: {
-//                     ...prevState.entities[entity][id],
-//                     [field]: newValue
-//                   }
-//                 }
-//               }
-//             };
-//           });
-//       };
-//     };
-//   }
-
-// If context is provided, then entities are scoped
-// TODO: need to better type this. Can scope to entities at the context level.
-// return (entity: "apartments" | "buildings" | "people") => {
-//   return (field: string, id: number) => {
-//     // TODO: use generics to better identify the type of the new value.
-//     return (newValue: any) =>
-//       this.setState(prevState => {
-//         return {
-//           ...prevState,
-//           contexts: {
-//             ...prevState.contexts,
-//             [context]: {
-//               ...prevState.contexts[context],
-//               entities: {
-//                 ...prevState.contexts[context].entities,
-//                 [entity]: {
-//                   ...prevState.contexts[context].entities[entity],
-//                   [id]: {
-//                     ...prevState.contexts[context].entities[entity][id],
-//                     [field]: newValue
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         };
-//       });
-//   };
-//   };
-// };
+// const test = changeHandlerBuilder("sovForm")("entities")("buildings")(789);

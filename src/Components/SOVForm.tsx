@@ -13,8 +13,8 @@ interface IProps {
   entities: ISOVFormEntities,
   errors: ISOVFormErrors,
   // TODO fix these anys
-  onFieldChange: (entity: EntityNames<ISOVFormEntities>) => (field: string, id: number) => (newValue: any) => void,
-  onValidationChange: (entity: EntityNames<ISOVFormEntities>) => (field: string, id: number) => (newValue: any) => void,
+  onFieldChange: (entity: keyof ISOVFormEntities) => (field: string) =>  (id: number) => (newValue: any) => void,
+  onValidationChange: (entity: keyof ISOVFormEntities) => (field: string, id: number) => (newValue: any) => void,
   // TODO: fix this any
   validateAllHandler: (newErrors: any) => void;
   clearFormHandler: () => void;

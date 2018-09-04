@@ -34,15 +34,20 @@ interface IBuilding {
 type NormalizeOne<T> = T extends number
   ? number
   : T extends string
-    ? string
-    : T extends number[]
-      ? number[]
-      : T extends string[]
-        ? string[]
-        : T extends Function
-          ? never
-          : T extends Array<Object> ? number[] : T extends Object ? number : T; // not reached due to compiler issue
+  ? string
+  : T extends number[]
+  ? number[]
+  : T extends string[]
+  ? string[]
+  : T extends Function
+  ? never
+  : T extends Array<Object> ? number[] : T extends Object ? number : T; // not reached due to compiler issue
 
+/**
+ * Will convert the object to a normalized object similar to a table in a relational database.
+ * Collection types like objects or arrays of objects will be mapped to 
+ * a number or array of numbers, respectively. 
+ */
 type Normalized<T> = { [K in keyof T]: NormalizeOne<T[K]> };
 
 // Alternate solution from the same stack overflow answer:
@@ -61,21 +66,12 @@ type Normalized<T> = { [K in keyof T]: NormalizeOne<T[K]> };
 //   [T] extends [Object] ? number :
 //   T;  // not reached due to compiler issue
 
-/**
- * Will convert the object to a normalized object similar to a table in a relational database.
- * Collection types like objects or arrays of objects will be mapped to 
- * a number or array of numbers, respectively. 
- */
-type Normalized<T> = {
-  [K in keyof T]: NormalizeOne<T[K]>;
-};
 
 /**
  * Indicates that a collection of objects have been keyed using a specified property, usually the ID.
  * A good example would be the keyBy method in the lodash api.
  */
 type Keyed<T> = { [id: number]: T | undefined };
-
 
 type Validator = (...param: any[]) => string | null | undefined;
 
@@ -103,13 +99,13 @@ interface IAppState {
   entities?: INormalizedEntities;
   contexts?: {
     [contextNames: string]:
-      | {
-          entities?: INormalizedEntities;
-          errors?: INormalizedErrors;
-          entities2?: INormalizedEntities;
-          errors2?: INormalizedErrors;
-        }
-      | undefined;
+    | {
+      entities?: INormalizedEntities;
+      errors?: INormalizedErrors;
+      entities2?: INormalizedEntities;
+      errors2?: INormalizedErrors;
+    }
+    | undefined;
   };
 }
 
@@ -142,7 +138,7 @@ type test3 = Required<keyof IMainState["contexts"]>;
 type test4 = keyof Required<IMainState["contexts"]>;
 type test5 = keyof Required<Required<IMainState["contexts"]>[test4]>;
 type test6 = Required<Required<IMainState>["contexts"]>;
-type test7 = Required<Required<IMainState["contexts"]>[test6]>;
+// type test7 = Required<Required<IMainState["contexts"]>[test6]>;
 
 // type test33 = Safe<{
 //   propertyName?: string;
@@ -169,32 +165,32 @@ type ChangeHandlerBuilder = <
   C extends keyof Required<Required<IMainState>["contexts"]>,
   CA extends keyof Required<Required<Required<IMainState>["contexts"]>[C]>,
   E extends keyof Required<
-    Required<Required<Required<IMainState>["contexts"]>[C]>[CA]
+  Required<Required<Required<IMainState>["contexts"]>[C]>[CA]
   >,
   I extends keyof Required<
-    Required<Required<Required<Required<IMainState>["contexts"]>[C]>[CA]>[E]
+  Required<Required<Required<Required<IMainState>["contexts"]>[C]>[CA]>[E]
   >,
   F extends keyof Required<
-    Required<
-      Required<Required<Required<Required<IMainState>["contexts"]>[C]>[CA]>[E]
-    >[I]
+  Required<
+  Required<Required<Required<Required<IMainState>["contexts"]>[C]>[CA]>[E]
+  >[I]
   >,
   V extends keyof Required<
-    Required<
-      Required<
-        Required<Required<Required<Required<IMainState>["contexts"]>[C]>[CA]>[E]
-      >[I]
-    >[F]
+  Required<
+  Required<
+  Required<Required<Required<Required<IMainState>["contexts"]>[C]>[CA]>[E]
+  >[I]
+  >[F]
   >
->(
+  >(
   context: C
 ) => (
-  category: CA
-) => (
-  entity: E
-) => (
-  id: I
-) => (field: F) => (value: V) => (prevState: IMainState) => IMainState;
+    category: CA
+  ) => (
+      entity: E
+    ) => (
+        id: I
+      ) => (field: F) => (value: V) => (prevState: IMainState) => IMainState;
 
 interface ISOVFormEntities extends INormalizedEntities {
   people?: Keyed<Normalized<IPerson>>;
