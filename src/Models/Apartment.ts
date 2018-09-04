@@ -12,7 +12,7 @@ export class Apartment implements IApartment {
   }
 }
 
-export class ApartmentNormalized implements Normalized<IApartment>{
+export class ApartmentNormalized implements Normalized<IApartment> {
   public apartmentID: number;
   public apartmentNumber: number;
   public tenants: number[];

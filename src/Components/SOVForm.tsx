@@ -1,6 +1,4 @@
-import React, {
-  SFC
-} from 'react';
+import React, { SFC } from "react";
 import { required, maxLength } from "../Validators/Validators";
 import Form from "./Form";
 import { map } from "lodash";
@@ -14,20 +12,20 @@ interface IProps {
   // TODO: this new value can be types. Could possibly type the whole function.
   entities: ISOVFormEntities,
   errors: ISOVFormErrors,
+  // TODO fix these anys
   onFieldChange: (entity: EntityNames<ISOVFormEntities>) => (field: string, id: number) => (newValue: any) => void,
   onValidationChange: (entity: EntityNames<ISOVFormEntities>) => (field: string, id: number) => (newValue: any) => void,
   // TODO: fix this any
-  validateAllHandler: (newErrors: any) => void
-  clearFormHandler: () => void
+  validateAllHandler: (newErrors: any) => void;
+  clearFormHandler: () => void;
 }
 
-const SOVForm: SFC<IProps> = (props) => {
-
+const SOVForm: SFC<IProps> = props => {
   const data: { buildings: IBuilding[] } = denormalize(
     { buildings: keys(props.entities.buildings) },
     { buildings: [buildingSchema] },
     props.entities
-  )
+  );
 
   return (
     <div>
@@ -40,9 +38,9 @@ const SOVForm: SFC<IProps> = (props) => {
         onFieldChange={props.onFieldChange}
         onValidationChange={props.onValidationChange}
       >
-        {({ ValidatedInput, SubmitButton, ClearButton }) =>
+        {({ ValidatedInput, SubmitButton, ClearButton }) => (
           <FormContents>
-            {map(data.buildings, building =>
+            {map(data.buildings, building => (
               <BuildingRow key={`building_${building.buildingID}`}>
                 <BuildingRow>
                   <Header>Building</Header>
@@ -116,21 +114,19 @@ const SOVForm: SFC<IProps> = (props) => {
                   ))}
                 </ApartmentRows>
               </BuildingRow>
-            )}
+            ))}
             <SubmitButton />
             <ClearButton />
           </FormContents>
-        }
+        )}
       </Form>
     </div>
   );
-}
+};
 
 export default SOVForm;
 
-const FormContents = styled.div`
-  
-`;
+const FormContents = styled.div``;
 
 const BuildingRow = styled.div`
   vertical-align: top;
@@ -138,22 +134,9 @@ const BuildingRow = styled.div`
 
 const ApartmentRows = styled.div`
   vertical-align: top;
-  
 `;
 
 const Header = styled.div`
   font-size: 14px;
   color: grey;
 `;
-
-export interface ISOVFormEntities {
-  people: Keyed<Normalized<IPerson>>,
-  buildings: Keyed<Normalized<IBuilding>>,
-  apartments: Keyed<Normalized<IApartment>>
-}
-
-export interface ISOVFormErrors {
-  people: Keyed<Errors<IPerson>>,
-  buildings: Keyed<Errors<IBuilding>>,
-  apartments: Keyed<Errors<IApartment>>
-}
