@@ -26,8 +26,14 @@ interface IProps<T> {
   // TODO fix this any
   errors: any;
   // TODO fix this any
+  validateAll: (newErrors: any) => void;
+  // TODO fix this any
+  onFieldChange: any,
+  // TODO fix this any
+  onValidationChange: any,
   clearForm: () => void;
   children: (renderProps: IRenderProps) => ReactNode;
+
 }
 
 class Form<T> extends React.Component<IProps<T>, {}> {
@@ -35,6 +41,7 @@ class Form<T> extends React.Component<IProps<T>, {}> {
 
   public SubmitButton = () => (
     <button onClick={this.runAllValidators}>Submit</button>
+  );
 
   public ClearButton = () => (
     <button onClick={this.props.clearForm}>Clear</button>
@@ -62,7 +69,7 @@ class Form<T> extends React.Component<IProps<T>, {}> {
         {...cProps}
         value={entities[entity][id][fieldName]}
         label={cProps.label !== undefined ? cProps.label : cProps.fieldName}
-        onFieldChange={onFieldChange(entity)(fieldName, id)}
+        onFieldChange={onFieldChange(entity)(fieldName)(id)}
         onValidationChange={onValidationChange(entity)(fieldName, id)}
         errors={errors[entity][id][fieldName]}
         validators={cProps.validators}
