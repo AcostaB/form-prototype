@@ -16,7 +16,7 @@ export class Building implements IBuilding {
   }
 }
 
-export class BuildingNormalized implements IBuildingNormalized {
+export class BuildingNormalized implements Normalized<IBuilding> {
   public buildingID: number;
   public name: string;
   public construction: ("wood" | "concrete" | "");

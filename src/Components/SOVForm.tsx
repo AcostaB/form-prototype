@@ -9,14 +9,13 @@ import { building as buildingSchema } from "../Schemas/Buildings";
 import { keys } from "lodash";
 import styled from "styled-components";
 
-
 interface IProps {
   // TODO: Make a type alias for this.
   // TODO: this new value can be types. Could possibly type the whole function.
   entities: ISOVFormEntities,
   errors: ISOVFormErrors,
-  onFieldChange: (entity: ("apartments" | "buildings" | "people")) => (field: string, id: number) => (newValue: any) => void,
-  onValidationChange: (entity: ("apartments" | "buildings" | "people")) => (field: string, id: number) => (newValue: any) => void,
+  onFieldChange: (entity: EntityNames<ISOVFormEntities>) => (field: string, id: number) => (newValue: any) => void,
+  onValidationChange: (entity: EntityNames<ISOVFormEntities>) => (field: string, id: number) => (newValue: any) => void,
   // TODO: fix this any
   validateAllHandler: (newErrors: any) => void
   clearFormHandler: () => void
@@ -148,9 +147,9 @@ const Header = styled.div`
 `;
 
 export interface ISOVFormEntities {
-  people: Keyed<IPersonNormalized>,
-  buildings: Keyed<IBuildingNormalized>,
-  apartments: Keyed<IApartmentNormalized>
+  people: Keyed<Normalized<IPerson>>,
+  buildings: Keyed<Normalized<IBuilding>>,
+  apartments: Keyed<Normalized<IApartment>>
 }
 
 export interface ISOVFormErrors {

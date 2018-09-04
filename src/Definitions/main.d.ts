@@ -7,8 +7,6 @@ interface IPerson {
   name: string
 }
 
-interface IPersonNormalized extends IPerson { }
-
 interface IAddress {
   addressID: number,
   line1: string,
@@ -18,18 +16,10 @@ interface IAddress {
   zip: string
 }
 
-interface IAddressNormalized extends IAddress { }
-
 interface IApartment {
   apartmentID: number,
   apartmentNumber: number,
   tenants: IPerson[]
-}
-
-interface IApartmentNormalized {
-  apartmentID: number,
-  apartmentNumber: number,
-  tenants: number[]
 }
 
 interface IBuilding {
@@ -37,39 +27,84 @@ interface IBuilding {
   name: string,
   construction: ("wood" | "concrete" | ""),
   website: string,
-  address?: IAddress,
-  apartments?: IApartment[]
+  address: IAddress,
+  apartments: IApartment[]
 }
 
-interface IBuildingNormalized {
-  buildingID: number,
-  name: string,
-  construction: ("wood" | "concrete" | ""),
-  website: string,
-  address: number,
-  apartments: number[]
-}
+// Solution for issue with Array<Object>
+// Obtained from: https://stackoverflow.com/questions/52105268/extends-arrayobject-not-working-as-expected-in-typescript
+type NormalizeOne<T> =
+  T extends number ? number :
+  T extends string ? string :
+  T extends number[] ? number[] :
+  T extends string[] ? string[] :
+  T extends Function ? never :
+  T extends Array<Object> ? number[] :
+  T extends Object ? number :
+  T;  // not reached due to compiler issue
 
-// TODO: improve on this so its non function properties only
-type Key<T> = keyof T;
+// Alternate solution from the same stack overflow answer:
+// type NormalizeOne<T> =
+//   [T] extends [number] ? number :
+//   [T] extends [number | undefined] ? number | undefined :
+//   [T] extends [string] ? string :
+//   [T] extends [string | undefined] ? string | undefined :
+//   [T] extends [number[]] ? number[] :
+//   [T] extends [number[] | undefined] ? number[] | undefined :
+//   [T] extends [string[]] ? string[] :
+//   [T] extends [string[] | undefined] ? string[] | undefined :
+//   [T] extends [Function] ? never :
+//   [T] extends [Array<Object>] ? number[] :
+//   [T] extends [Array<Object> | undefined] ? number[] | undefined :
+//   [T] extends [Object] ? number :
+//   T;  // not reached due to compiler issue
 
+/**
+ * Will convert the object to a normalized object similar to a table in a relational database.
+ * Collection types like objects or arrays of objects will be mapped to 
+ * a number or array of numbers, respectively. 
+ */
+type Normalized<T> = {
+  [K in keyof T]: NormalizeOne<T[K]>;
+};
+
+/**
+ * Indicates that a collection of objects have been keyed using a specified property, usually the ID.
+ * A good example would be the keyBy method in the lodash api.
+ */
 type Keyed<T> = { [id: number]: T };
-
-// type KeyedErrors<T> = { [K in keyof T]?: string[] | null | undefined };
 
 type Validator = (...param: any[]) => string | null | undefined;
 
-// TODO improve on this. this should only constitute of primitive values (no objects or arrays), no functions 
-type Errors<T> = { [K in keyof T]?: string[] };
+/**
+ * All string and number values are replaces with a string array. Functions and object arrays are ignored.
+ */
+type Errors<T> = { [K in keyof T]?:
+  T[K] extends number ? string[] :
+  T[K] extends string ? string[] :
+  T[K] extends Function ? never :
+  T[K] extends Object[] ? never :
+  string[]
+};
+
+/**
+ * Type that lists out the non function property names of a specified object.
+ *
+ * @param object The object whose property names will be fetched.
+ */
+type NonFunctionPropertyNames<T> = {
+  [K in keyof T]: T[K] extends Function ? never : K
+}[keyof T];
+
+/**
+ * Simple alias for the NonFunctionPropertyNames<T> type. Refer to that for more info.
+ *
+ * @param object The object whose property names will be fetched.
+ */
+type EntityNames<T> = NonFunctionPropertyNames<T>;
+
+
 // TODO: this could potentially be a type
 // type DogFormChangeHandler<T> = 
 
-// TODO: this could be a generic
-interface IFieldChange {
-  entity: string,
-  id: number,
-  fieldName: string,
-  newValue: any
-}
-
-// TODO make a type for normalized entities!
+// type KeyedErrors<T> = { [K in keyof T]?: string[] | null | undefined };

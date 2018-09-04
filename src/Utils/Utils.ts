@@ -48,7 +48,7 @@ export const mapValidatorsToErrors = (validators: any, values: any): any => {
 };
 
 // TODO fix these anys
-export const addOrEditEntity = (prevEntityCollection, entity, id, field, value) => {
+export const addOrEditEntity = (prevEntityCollection: any, entity: any, id: number, field: string, value: any) => {
   // Prevent references to undefined objects.
   const entityCollectionToSpread = !isEmpty(prevEntityCollection[entity]) ? prevEntityCollection[entity] : {};
   const entityObjectToSpread = !isEmpty(entityCollectionToSpread) ? prevEntityCollection[entity][id] : {};

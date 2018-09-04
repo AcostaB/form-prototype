@@ -103,7 +103,7 @@ class App extends React.Component<{}, IState> {
   };
 
   // TODO: fix this any
-  public validateAllHandler = newErrors => {
+  public validateAllHandler = (newErrors: string[]) => {
     this.setState((prevState: IState): any => (
       {
         ...prevState,
@@ -118,7 +118,7 @@ class App extends React.Component<{}, IState> {
   };
 
   public clearFormHandler = () => {
-    const emptyBuilding: IBuildingNormalized = new BuildingNormalized();
+    const emptyBuilding: Normalized<IBuilding> = new BuildingNormalized();
     const emptyBuildingErrors: Errors<IBuilding> = {
       construction: undefined,
       name: undefined,
@@ -172,12 +172,11 @@ export default App;
 
 const fetchBuildings = (): ISOVFormEntities => {
   const result = normalize(buildingData, [buildingSchema])
-  console.dir(result);
   return result.entities as ISOVFormEntities;
 }
 
 const createErrorsObject = (entities: ISOVFormEntities): ISOVFormErrors => {
-  return mapValues(entities, entity => mapValues(entity, id => mapValues(id, property => null))) as ISOVFormErrors;
+  return mapValues(entities, entity => mapValues(entity, id => mapValues(id, () => null))) as ISOVFormErrors;
 }
 
 const Logo = styled.img` 

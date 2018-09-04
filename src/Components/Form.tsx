@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, SFC } from 'react';
 import { default as VI } from "../UI-Toolkit/ValidatedInput";
 import { addOrEditEntity, mapValidatorsToErrors } from "../Utils/Utils";
 // import { filter, map, mapValues } from "lodash";
@@ -24,7 +24,7 @@ interface IProps {
   onFieldChange: (entity: ("apartments" | "buildings" | "people")) => (field: string, id: number) => (newValue: any) => void,
   onValidationChange: (entity: ("apartments" | "buildings" | "people")) => (field: string, id: number) => (newValue: any) => void,
   clearForm: () => void,
-  children: ({ ValidatedInput, SubmitButton, ClearButton }) => ReactNode
+  children: (props: { ValidatedInput: SFC<IValidatedInputProps>, SubmitButton: SFC, ClearButton: SFC }) => ReactNode
 }
 
 class Form extends React.Component<IProps, {}> {
@@ -38,8 +38,6 @@ class Form extends React.Component<IProps, {}> {
     this.fieldValidators = { ...this.fieldValidators, [cProps.fieldName]: cProps.validators };
     const { onFieldChange, onValidationChange, entities, errors } = this.props;
     const { entity, fieldName, id, validators } = cProps;
-
-    console.log("this.fieldValidators: ", this.fieldValidators);
 
     // Insert the validators. Function handles possible references to undefined objects.
     this.fieldValidators = addOrEditEntity(this.fieldValidators, entity, id, fieldName, validators);
@@ -58,12 +56,6 @@ class Form extends React.Component<IProps, {}> {
 
   // TODO drastically need to improve on this.
   public runAllValidators = () => {
-    // const newErrors = mapValues(this.fieldValidators, (validators, index) => filter(map(validators, validator => validator(this.props.model[index])), value => value !== null));
-    // console.log(newErrors);
-    // this.props.onValidationChange(newErrors);
-
-    console.log("this.props.entities", this.props.entities)
-
     const newErrors = mapValidatorsToErrors(this.fieldValidators, this.props.entities);
 
     this.props.validateAll(newErrors);
@@ -83,8 +75,6 @@ class Form extends React.Component<IProps, {}> {
 export default Form;
 
 interface IValidatedInputProps {
-  // TODO: fix this any
-  classes: any,
   // TODO: this type could be better
   entity: ("apartments" | "buildings" | "people"),
   errors?: string[] | null | undefined,
@@ -93,6 +83,5 @@ interface IValidatedInputProps {
   // TODO: Make a type alias for this. Use generic at the highest level and have that be used for this field?
   label?: string,
   // TODO: Same thing here. I should be able to make it into a generic that can infer this.
-  validators: Validator[],
-  value: string | number,
+  validators: Validator[]
 }

@@ -32,7 +32,6 @@ const ValidatedInput: SFC<IProps> = (props) => {
   }
 
   const onBlurHandler = () => {
-    console.log("on blur fired");
     const errors: string[] = filter(map(props.validators, validator => validator(props.value)), error => error !== null && error !== undefined) as string[];
 
     props.onValidationChange(errors);
