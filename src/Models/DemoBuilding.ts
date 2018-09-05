@@ -1,6 +1,6 @@
 import { newUniqueID } from "../Utils/Utils";
 
-export class Building implements IBuilding {
+export class DemoBuilding implements IDemoBuilding {
   public buildingID: number;
   public name: string;
   public construction: "wood" | "concrete" | "";
@@ -16,7 +16,7 @@ export class Building implements IBuilding {
   }
 }
 
-export class BuildingNormalized implements Normalized<IBuilding> {
+export class DemoBuildingNormalized implements Normalized<IDemoBuilding> {
   public buildingID: number;
   public name: string;
   public construction: "wood" | "concrete" | "";

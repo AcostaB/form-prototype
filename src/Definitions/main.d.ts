@@ -1,36 +1,3 @@
-interface IPerson {
-  personID: number;
-  age: number;
-  dateOfBirth: string;
-  email: string;
-  gender: string;
-  name: string;
-}
-
-interface IAddress {
-  addressID: number;
-  line1: string;
-  line2: string;
-  city: string;
-  state: string;
-  zip: string;
-}
-
-interface IApartment {
-  apartmentID: number;
-  apartmentNumber: number;
-  tenants: IPerson[];
-}
-
-interface IBuilding {
-  buildingID: number;
-  name: string;
-  construction: "wood" | "concrete" | "";
-  website: string;
-  address?: IAddress;
-  apartments?: IApartment[];
-}
-
 type NormalizeOne<T> = T extends number
   ? number
   : T extends string
@@ -114,14 +81,14 @@ interface IAppState {
 interface IMainState extends IAppState {
   entities?: {};
   contexts?: {
-    sovForm?: {
+    DemoForm?: {
+      entities?: IDemoFormEntities;
+      errors?: IDemoFormErrors;
+    };
+    SOVForm?: {
       entities?: ISOVFormEntities;
       errors?: ISOVFormErrors;
-    };
-    sovForm2?: {
-      entities2?: ISOVFormEntities;
-      errors2?: ISOVFormErrors;
-    };
+    }
   };
 }
 
@@ -191,15 +158,3 @@ type ChangeHandlerBuilder = <
     ) => (
         id: I
       ) => (field: F) => (value: V) => (prevState: IMainState) => IMainState;
-
-interface ISOVFormEntities extends INormalizedEntities {
-  people?: Keyed<Normalized<IPerson>>;
-  buildings?: Keyed<Normalized<IBuilding>>;
-  apartments?: Keyed<Normalized<IApartment>>;
-}
-
-interface ISOVFormErrors extends INormalizedErrors {
-  people?: Keyed<Errors<IPerson>>;
-  buildings?: Keyed<Errors<IBuilding>>;
-  apartments?: Keyed<Errors<IApartment>>;
-}

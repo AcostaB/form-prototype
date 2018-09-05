@@ -13,4 +13,3 @@ export const building = new schema.Entity("buildings", {
   address,
   apartments: [apartment]
 }, { idAttribute: "buildingID" })
-

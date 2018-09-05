@@ -21,7 +21,7 @@ const test3: Keyed<Normalized<IApartment>> = {
   }
 };
 
-const test4: Normalized<IBuilding> = {
+const test4: Normalized<IDemoBuilding> = {
   buildingID: 12,
   name: "test",
   // TODO this did not inherit the restrictions.

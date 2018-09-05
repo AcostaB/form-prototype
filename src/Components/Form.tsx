@@ -1,6 +1,8 @@
 import React, { ReactNode, SFC } from "react";
 import { default as VI } from "../UI-Toolkit/ValidatedInput";
 import { addOrEditEntityField, mapValidatorsToErrors } from "../Utils/Utils";
+import Button from '@material-ui/core/Button';
+import styled from "styled-components";
 // import { filter, map, mapValues } from "lodash";
 
 // TODO: Work on making this generic.
@@ -18,6 +20,7 @@ interface IRenderProps {
   ValidatedInput: SFC<IValidatedInputProps>;
   SubmitButton: SFC;
   ClearButton: SFC;
+  ButtonRow: SFC;
 }
 
 interface IProps<T> {
@@ -40,12 +43,20 @@ class Form<T> extends React.Component<IProps<T>, {}> {
   public fieldValidators = {};
 
   public SubmitButton = () => (
-    <button onClick={this.runAllValidators}>Submit</button>
+    <Button variant="contained" color="primary" onClick={this.runAllValidators}>
+      Submit
+    </Button>
   );
 
   public ClearButton = () => (
-    <button onClick={this.props.clearForm}>Clear</button>
+    <Button variant="contained" onClick={this.runAllValidators}>
+      Clear
+    </Button>
   );
+
+  public ButtonRow = (cProps: any) => (
+    <StyledButtonRow>{cProps.children}</StyledButtonRow>
+  )
 
   public ValidatedInput = (cProps: IValidatedInputProps) => {
     this.fieldValidators = {
@@ -92,7 +103,8 @@ class Form<T> extends React.Component<IProps<T>, {}> {
       {this.props.children({
         ValidatedInput: this.ValidatedInput,
         SubmitButton: this.SubmitButton,
-        ClearButton: this.ClearButton
+        ClearButton: this.ClearButton,
+        ButtonRow: this.ButtonRow
       })}
     </div>
   );
@@ -102,7 +114,7 @@ export default Form;
 
 interface IValidatedInputProps {
   // TODO: this type could be better
-  entity: "apartments" | "buildings" | "people";
+  entity: string;
   errors?: string[] | null | undefined;
   fieldName: string;
   id: number;
@@ -111,3 +123,9 @@ interface IValidatedInputProps {
   // TODO: Same thing here. I should be able to make it into a generic that can infer this.
   validators: Validator[];
 }
+
+const StyledButtonRow = styled.div`
+  display: flex-inline;
+  text-align: right;
+  margin-top: 10px;
+`;

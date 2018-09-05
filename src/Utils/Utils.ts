@@ -124,4 +124,4 @@ export const changeHandlerBuilder: ChangeHandlerBuilder = context => category =>
   };
 };
 
-// const test = changeHandlerBuilder("sovForm")("entities")("buildings")(789);
+// const test = changeHandlerBuilder("DemoForm")("entities")("buildings")(789);

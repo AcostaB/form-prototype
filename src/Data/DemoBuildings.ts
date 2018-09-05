@@ -1,4 +1,4 @@
-export const buildingData: any = [
+export const data: any = [
   {
     "buildingID": 1,
     "name": "Avengers Tower",
