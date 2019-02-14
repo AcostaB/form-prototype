@@ -2,18 +2,18 @@ import "./App.css";
 import logo from "./logo.svg";
 import * as React from "react";
 // import DemoForm from "./Components/DemoForm";
-import { SOVForm } from "./Components/SOVForm";
+import { LocationForm } from "./Components/LocationForm";
 import styled from "styled-components";
 import { normalize } from "normalizr";
 import { building as BuildingSchema, location as LocationSchema } from "./Schemas/Demo";
 import { data as buildingData } from "./Data/Buildings";
-import { data as locationData } from "./Data/SOV";
+import { data as locationData } from "./Data/Location";
 import { mapValues, keyBy } from "lodash";
 import { BuildingNormalized, Building } from "./Models/Building";
 import { changeHandlerBuilder } from "./Utils/Utils";
 import { MainState, Normalized, Errors } from "./Definitions/main";
-import { DemoFormErrors, DemoFormEntities } from "./Definitions/Demo";
-import { ISOVFormErrors, ISOVFormEntities } from "./Definitions/SOV";
+import { DemoFormErrors, DemoFormEntities } from "./Definitions/DemoForm";
+import { LocationFormErrors, LocationFormEntities } from "./Definitions/LocationForm";
 
 class App extends React.Component<{}, MainState> {
   constructor(props: {}) {
@@ -26,9 +26,9 @@ class App extends React.Component<{}, MainState> {
           entities: fetchBuildings(),
           errors: createErrorsObject(fetchBuildings())
         },
-        SOVForm: {
+        LocationForm: {
           entities: fetchLocations(),
-          errors: createSOVErrorsObject(fetchLocations())
+          errors: createLocationErrorsObject(fetchLocations())
         }
       }
     };
@@ -49,14 +49,14 @@ class App extends React.Component<{}, MainState> {
     );
   };
 
-  public validateAllSOVHandler = (newErrorsByEntity: ISOVFormErrors) => {
+  public validateAllLocationHandler = (newErrorsByEntity: LocationFormErrors) => {
     this.setState(
       (prevState: MainState): MainState => ({
         ...prevState,
         contexts: {
           ...prevState.contexts,
-          SOVForm: {
-            ...prevState.contexts!.SOVForm,
+          LocationForm: {
+            ...prevState.contexts!.LocationForm,
             errors: newErrorsByEntity
           }
         }
@@ -106,18 +106,18 @@ class App extends React.Component<{}, MainState> {
     //     ? this.state.contexts.DemoForm.errors
     //     : {};
 
-    const sovEntities: ISOVFormEntities =
+    const LocationEntities: LocationFormEntities =
       this.state.contexts !== undefined
-        && this.state.contexts.SOVForm !== undefined
-        && this.state.contexts.SOVForm.entities !== undefined
-        ? this.state.contexts.SOVForm.entities
+        && this.state.contexts.LocationForm !== undefined
+        && this.state.contexts.LocationForm.entities !== undefined
+        ? this.state.contexts.LocationForm.entities
         : {};
 
-    const sovErrors: ISOVFormErrors =
+    const LocationErrors: LocationFormErrors =
       this.state.contexts !== undefined
-        && this.state.contexts.SOVForm !== undefined
-        && this.state.contexts.SOVForm.errors !== undefined
-        ? this.state.contexts.SOVForm.errors
+        && this.state.contexts.LocationForm !== undefined
+        && this.state.contexts.LocationForm.errors !== undefined
+        ? this.state.contexts.LocationForm.errors
         : {};
 
     return (
@@ -136,12 +136,12 @@ class App extends React.Component<{}, MainState> {
           validateAllHandler={this.validateAllDemoHandler}
           clearFormHandler={this.clearFormHandler}
         /> */}
-          <SOVForm
-            onFieldChange={changeHandlerBuilder("SOVForm")("entities")}
-            onValidationChange={changeHandlerBuilder("SOVForm")("errors")}
-            entities={sovEntities}
-            errors={sovErrors}
-            validateAllHandler={this.validateAllSOVHandler}
+          <LocationForm
+            onFieldChange={changeHandlerBuilder("LocationForm")("entities")}
+            onValidationChange={changeHandlerBuilder("LocationForm")("errors")}
+            entities={LocationEntities}
+            errors={LocationErrors}
+            validateAllHandler={this.validateAllLocationHandler}
             clearFormHandler={this.clearFormHandler}
           />
         </Container>
@@ -167,15 +167,15 @@ const createErrorsObject = (entities: DemoFormEntities): DemoFormErrors => {
   ) as DemoFormErrors;
 };
 
-const fetchLocations = (): ISOVFormEntities => {
+const fetchLocations = (): LocationFormEntities => {
   const result = normalize(locationData, [LocationSchema]);
-  return result.entities as ISOVFormEntities;
+  return result.entities as LocationFormEntities;
 };
 
-const createSOVErrorsObject = (entities: ISOVFormEntities): ISOVFormErrors => {
+const createLocationErrorsObject = (entities: LocationFormEntities): LocationFormErrors => {
   return mapValues(entities, entity =>
     mapValues(entity, id => mapValues(id, property => []))
-  ) as ISOVFormErrors;
+  ) as LocationFormErrors;
 };
 
 const Logo = styled.img`

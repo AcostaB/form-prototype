@@ -7,7 +7,7 @@ import { building as buildingSchema } from "../Schemas/Demo";
 import { keys } from "lodash";
 import styled from "styled-components";
 import { Building } from "../Models/Building";
-import { DemoFormEntities, DemoFormErrors } from "../Definitions/Demo";
+import { DemoFormEntities, DemoFormErrors } from "../Definitions/DemoForm";
 
 interface Props {
   // TODO: Make a type alias for this.

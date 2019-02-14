@@ -4,29 +4,28 @@ import Form from "./Form";
 import { map } from "lodash";
 import { denormalize } from "normalizr";
 import { location as locationSchema } from "../Schemas/Demo";
-import { createStyles, Theme } from "@material-ui/core";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { keys } from "lodash";
 import styled from "styled-components";
-import { ISOVFormEntities, ISOVFormErrors } from "../Definitions/SOV";
+import { LocationFormEntities, LocationFormErrors } from "../Definitions/LocationForm";
 import { Location } from '../Models/Location';
 
 interface Props {
   // TODO: Make a type alias for this.
   // TODO: this new value can be types. Could possibly type the whole function.
-  entities: ISOVFormEntities,
-  errors: ISOVFormErrors,
+  entities: LocationFormEntities,
+  errors: LocationFormErrors,
   // TODO fix these anys
-  onFieldChange: (entity: keyof ISOVFormEntities) => (field: string) => (id: number) => (newValue: any) => void,
-  onValidationChange: (entity: keyof ISOVFormEntities) => (field: string, id: number) => (newValue: any) => void,
+  onFieldChange: (entity: keyof LocationFormEntities) => (field: string) => (id: number) => (newValue: any) => void,
+  onValidationChange: (entity: keyof LocationFormEntities) => (field: string, id: number) => (newValue: any) => void,
   // TODO: fix this any
   validateAllHandler: (newErrors: any) => void;
   clearFormHandler: () => void;
 }
 
-export const SOVForm: SFC<Props> = props => {
+export const LocationForm: SFC<Props> = props => {
   const data: { locations: Location[] } = denormalize(
     { locations: keys(props.entities.locations) },
     { locations: [locationSchema] },

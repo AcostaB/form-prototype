@@ -1,3 +1,6 @@
+import { DemoFormEntities, DemoFormErrors } from './DemoForm';
+import { LocationFormEntities, LocationFormErrors } from './LocationForm';
+
 export type NormalizeOne<T> = T extends number
   ? number
   : T extends string
@@ -84,9 +87,9 @@ export interface MainState extends AppState {
       entities?: DemoFormEntities;
       errors?: DemoFormErrors;
     };
-    SOVForm?: {
-      entities?: SOVFormEntities;
-      errors?: SOVFormErrors;
+    LocationForm?: {
+      entities?: LocationFormEntities;
+      errors?: LocationFormErrors;
     }
   };
 }
@@ -99,7 +102,7 @@ export interface MainState extends AppState {
 // export type Required<T> = Exclude<T, undefined>;
 
 export type test1 = keyof Required<MainState>;
-export type test2 = keyof IMainState["contexts"];
+export type test2 = keyof MainState["contexts"];
 export type test3 = Required<keyof MainState["contexts"]>;
 export type test4 = keyof Required<MainState["contexts"]>;
 export type test5 = keyof Required<Required<MainState["contexts"]>[test4]>;
