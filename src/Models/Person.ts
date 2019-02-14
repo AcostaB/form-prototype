@@ -1,6 +1,6 @@
 import { newUniqueID } from "../Utils/Utils";
 
-export class Person implements IPerson {
+export class Person {
   public personID: number;
   public age: number;
   public dateOfBirth: string;

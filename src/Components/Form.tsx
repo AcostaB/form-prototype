@@ -3,6 +3,7 @@ import { default as VI } from "../UI-Toolkit/ValidatedInput";
 import { addOrEditEntityField, mapValidatorsToErrors } from "../Utils/Utils";
 import Button from '@material-ui/core/Button';
 import styled from "styled-components";
+import { Validator } from "../Definitions/main";
 // import { filter, map, mapValues } from "lodash";
 
 // TODO: Work on making this generic.
@@ -16,7 +17,7 @@ import styled from "styled-components";
 
 // TODO: make it possible to add form level validations, e.g. if multiple text fields, addition cannot be over 100;
 
-interface IRenderProps {
+interface RenderProps {
   ValidatedInput: SFC<IValidatedInputProps>;
   SubmitButton: SFC;
   ClearButton: SFC;
@@ -35,7 +36,7 @@ interface IProps<T> {
   // TODO fix this any
   onValidationChange: any,
   clearForm: () => void;
-  children: (renderProps: IRenderProps) => ReactNode;
+  children: (renderProps: RenderProps) => ReactNode;
 
 }
 

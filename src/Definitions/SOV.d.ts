@@ -1,48 +1,12 @@
-interface IAddress {
-  id: number;
-  addressID: number;
-  line1: string;
-  line2: string;
-  city: string;
-  state: string;
-  zip: string;
-}
+import { NormalizedEntities, NormalizedErrors } from './main';
 
-interface IBuilding {
-  id: number;
-  buildingID: number;
-  locationName: string;
-  buildingName: string;
-  streetNumber?: number;
-  address?: IAddress;
-  isPropertyWithin1000FeetOfWater: true,
-  numberOfBuildings: number,
-  isoConstructionCode: string,
-  numberOfStories: number,
-  originallyBuilt: number,
-  wiring: number,
-  plumbing: number,
-  heating: number,
-  totalTiv: number,
-  basement: string,
-  shapeOfRoof: string
-}
-
-interface ILocation {
-  id: number,
-  locationID: number,
-  locationName: string,
-  address: IAddress,
-  buildings: IBuilding[]
-}
-
-interface ISOVFormEntities extends INormalizedEntities {
+export interface ISOVFormEntities extends NormalizedEntities {
   addresses?: Keyed<Normalized<IAddress>>;
   buildings?: Keyed<Normalized<IBuilding>>;
   locations?: Keyed<Normalized<ILocation>>;
 }
 
-interface ISOVFormErrors extends INormalizedErrors {
+export interface ISOVFormErrors extends NormalizedErrors {
   addresses?: Keyed<Errors<IAddress>>;
   buildings?: Keyed<Errors<IBuilding>>;
   locations?: Keyed<Errors<ILocation>>;

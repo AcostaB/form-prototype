@@ -12,4 +12,9 @@ export const address = new schema.Entity("addresses", {}, { idAttribute: "addres
 export const building = new schema.Entity("buildings", {
   address,
   apartments: [apartment]
-}, { idAttribute: "buildingID" })
+}, { idAttribute: "buildingID" });
+
+export const location = new schema.Entity("locations", {
+  address,
+  buildings: [building]
+});

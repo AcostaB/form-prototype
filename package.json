@@ -3,31 +3,36 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@": "types/validator",
     "@material-ui/core": "^1.5.0",
-    "@material-ui/icons": "^3.0.1",
-    "@types/lodash": "^4.14.116",
-    "@types/validator": "^9.4.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "normalizr": "^3.2.4",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
-    "react-scripts-ts": "2.17.0",
+    "react-scripts": "^2.1.5",
     "styled-components": "^3.4.2",
     "validator": "^10.5.0"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.1",
-    "@types/node": "^10.7.1",
-    "@types/react": "^16.4.11",
-    "@types/react-dom": "^16.0.7",
-    "typescript": "^3.0.3"
-  }
+    "@material-ui/icons": "^3.0.1",
+    "@types/jest": "^23.3.14",
+    "@types/lodash": "^4.14.116",
+    "@types/node": "^10.12.26",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.1",
+    "@types/validator": "^9.4.1",
+    "typescript": "^3.3.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

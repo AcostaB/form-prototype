@@ -1,41 +1,22 @@
 import { newUniqueID } from "../Utils/Utils";
+import { Normalized } from "../Definitions/main";
 
-export class Address implements IAddress {
-  public id: number;
-  public addressID: number;
-  public line1: string;
-  public line2: string;
-  public city: string;
-  public state: string;
-  public zip: string;
-
-  constructor() {
-    this.id = newUniqueID();
-    this.addressID = newUniqueID();
-    this.line1 = "";
-    this.line2 = "";
-    this.city = "";
-    this.state = "";
-    this.zip = "";
-  }
+export class Address {
+  public id: number = newUniqueID();
+  public addressID: number = newUniqueID();
+  public line1: string = '';
+  public line2: string = '';
+  public city: string = '';
+  public state: string = '';
+  public zip: string = '';
 }
 
-export class AddressNormalized implements Normalized<IAddress> {
-  public id: number;
-  public addressID: number;
-  public line1: string;
-  public line2: string;
-  public city: string;
-  public state: string;
-  public zip: string;
-
-  constructor() {
-    this.id = newUniqueID();
-    this.addressID = newUniqueID();
-    this.line1 = "";
-    this.line2 = "";
-    this.city = "";
-    this.state = "";
-    this.zip = "";
-  }
+export class AddressNormalized implements Normalized<Address> {
+  public id: number = newUniqueID();
+  public addressID: number = newUniqueID();
+  public line1: string = '';
+  public line2: string = '';
+  public city: string = '';
+  public state: string = '';
+  public zip: string = '';
 }

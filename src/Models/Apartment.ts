@@ -1,25 +1,15 @@
 import { newUniqueID } from "../Utils/Utils";
+import { Person } from '../Models/Person';
+import { Normalized } from "../Definitions/main";
 
-export class Apartment implements IApartment {
-  public apartmentID: number;
-  public apartmentNumber: number;
-  public tenants: IPerson[];
-
-  constructor() {
-    this.apartmentID = newUniqueID();
-    this.apartmentNumber = 0;
-    this.tenants = [];
-  }
+export class Apartment {
+  public apartmentID: number = newUniqueID();
+  public apartmentNumber: number = 0;
+  public tenants: Person[] = [];
 }
 
-export class ApartmentNormalized implements Normalized<IApartment> {
-  public apartmentID: number;
-  public apartmentNumber: number;
-  public tenants: number[];
-
-  constructor() {
-    this.apartmentID = newUniqueID();
-    this.apartmentNumber = 0;
-    this.tenants = [];
-  }
+export class ApartmentNormalized implements Normalized<Apartment> {
+  public apartmentID: number = newUniqueID();
+  public apartmentNumber: number = 0;
+  public tenants: number[] = [];
 }

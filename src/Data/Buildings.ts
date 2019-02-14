@@ -1,16 +1,19 @@
-export const data: any = [
+import { Building } from '../Models/Building';
+
+export const data: Building[] = [
   {
     "buildingID": 1,
     "name": "Avengers Tower",
     "construction": "wood",
     "website": "avengers.com",
     "address": {
+      "id": 1,
       "addressID": 1,
       "line1": "street",
       "line2": "avenue",
       "city": "new york",
       "state": "new york",
-      "zip": 33222
+      "zip": "33222"
     },
     "apartments": [
       {
@@ -65,12 +68,13 @@ export const data: any = [
     "construction": "wood",
     "website": "willywonka.com",
     "address": {
+      "id": 2,
       "addressID": 2,
       "line1": "street",
       "line2": "avenue",
       "city": "new york",
       "state": "new york",
-      "zip": 33222
+      "zip": "33222"
     },
     "apartments": [
       {

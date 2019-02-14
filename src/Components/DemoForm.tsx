@@ -6,22 +6,24 @@ import { denormalize } from "normalizr";
 import { building as buildingSchema } from "../Schemas/Demo";
 import { keys } from "lodash";
 import styled from "styled-components";
+import { Building } from "../Models/Building";
+import { DemoFormEntities, DemoFormErrors } from "../Definitions/Demo";
 
-interface IProps {
+interface Props {
   // TODO: Make a type alias for this.
   // TODO: this new value can be types. Could possibly type the whole function.
-  entities: IDemoFormEntities,
-  errors: IDemoFormErrors,
+  entities: DemoFormEntities,
+  errors: DemoFormErrors,
   // TODO fix these anys
-  onFieldChange: (entity: keyof IDemoFormEntities) => (field: string) => (id: number) => (newValue: any) => void,
-  onValidationChange: (entity: keyof IDemoFormEntities) => (field: string, id: number) => (newValue: any) => void,
+  onFieldChange: (entity: keyof DemoFormEntities) => (field: string) => (id: number) => (newValue: any) => void,
+  onValidationChange: (entity: keyof DemoFormEntities) => (field: string, id: number) => (newValue: any) => void,
   // TODO: fix this any
   validateAllHandler: (newErrors: any) => void;
   clearFormHandler: () => void;
 }
 
-const DemoForm: SFC<IProps> = props => {
-  const data: { buildings: IDemoBuilding[] } = denormalize(
+const DemoForm: SFC<Props> = props => {
+  const data: { buildings: Building[] } = denormalize(
     { buildings: keys(props.entities.buildings) },
     { buildings: [buildingSchema] },
     props.entities

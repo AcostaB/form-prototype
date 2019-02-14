@@ -5,15 +5,17 @@ import * as React from "react";
 import { SOVForm } from "./Components/SOVForm";
 import styled from "styled-components";
 import { normalize } from "normalizr";
-import { building as demoBuildingSchema } from "./Schemas/Demo";
-import { data as buildingData } from "./Data/DemoBuildings";
-import { location as locationSchema } from "./Schemas/SOV";
+import { building as BuildingSchema, location as LocationSchema } from "./Schemas/Demo";
+import { data as buildingData } from "./Data/Buildings";
 import { data as locationData } from "./Data/SOV";
 import { mapValues, keyBy } from "lodash";
-import { DemoBuildingNormalized } from "./Models/DemoBuilding";
+import { BuildingNormalized, Building } from "./Models/Building";
 import { changeHandlerBuilder } from "./Utils/Utils";
+import { MainState, Normalized, Errors } from "./Definitions/main";
+import { DemoFormErrors, DemoFormEntities } from "./Definitions/Demo";
+import { ISOVFormErrors, ISOVFormEntities } from "./Definitions/SOV";
 
-class App extends React.Component<{}, IMainState> {
+class App extends React.Component<{}, MainState> {
   constructor(props: {}) {
     super(props);
 
@@ -32,9 +34,9 @@ class App extends React.Component<{}, IMainState> {
     };
   }
 
-  public validateAllDemoHandler = (newErrorsByEntity: IDemoFormErrors) => {
+  public validateAllDemoHandler = (newErrorsByEntity: DemoFormErrors) => {
     this.setState(
-      (prevState: IMainState): IMainState => ({
+      (prevState: MainState): MainState => ({
         ...prevState,
         contexts: {
           ...prevState.contexts,
@@ -49,7 +51,7 @@ class App extends React.Component<{}, IMainState> {
 
   public validateAllSOVHandler = (newErrorsByEntity: ISOVFormErrors) => {
     this.setState(
-      (prevState: IMainState): IMainState => ({
+      (prevState: MainState): MainState => ({
         ...prevState,
         contexts: {
           ...prevState.contexts,
@@ -63,15 +65,15 @@ class App extends React.Component<{}, IMainState> {
   };
 
   public clearFormHandler = () => {
-    const emptyBuilding: Normalized<IDemoBuilding> = new DemoBuildingNormalized();
-    const emptyBuildingErrors: Errors<IDemoBuilding> = {
+    const emptyBuilding: Normalized<Building> = new BuildingNormalized();
+    const emptyBuildingErrors: Errors<Building> = {
       construction: undefined,
       name: undefined,
       website: undefined
     };
 
     this.setState(
-      (prevState: IMainState): IMainState => ({
+      (prevState: MainState): MainState => ({
         ...prevState,
         contexts: {
           DemoForm: {
@@ -154,19 +156,19 @@ class App extends React.Component<{}, IMainState> {
 
 export default App;
 
-const fetchBuildings = (): IDemoFormEntities => {
-  const result = normalize(buildingData, [demoBuildingSchema]);
-  return result.entities as IDemoFormEntities;
+const fetchBuildings = (): DemoFormEntities => {
+  const result = normalize(buildingData, [BuildingSchema]);
+  return result.entities as DemoFormEntities;
 };
 
-const createErrorsObject = (entities: IDemoFormEntities): IDemoFormErrors => {
+const createErrorsObject = (entities: DemoFormEntities): DemoFormErrors => {
   return mapValues(entities, entity =>
-    mapValues(entity, id => mapValues(id, property => []))
-  ) as IDemoFormErrors;
+    mapValues(entity, id => mapValues(id, () => []))
+  ) as DemoFormErrors;
 };
 
 const fetchLocations = (): ISOVFormEntities => {
-  const result = normalize(locationData, [locationSchema]);
+  const result = normalize(locationData, [LocationSchema]);
   return result.entities as ISOVFormEntities;
 };
 

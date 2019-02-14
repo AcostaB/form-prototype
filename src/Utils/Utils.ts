@@ -1,4 +1,5 @@
 import { isEmpty, filter, map, mapValues } from "lodash";
+import { ChangeHandlerBuilder } from "../Definitions/main";
 
 let counter = 0;
 
@@ -90,7 +91,8 @@ export const changeHandlerBuilder: ChangeHandlerBuilder = context => category =>
 
   const safeContexts = (prevState.contexts !== undefined
     ? prevStateAsRequired.contexts
-    : {}) as Required<typeof prevStateAsRequired.contexts>;
+    : {}) as any;
+  // : {}) as Required<typeof prevStateAsRequired.contexts>;
 
   const safeContext: any =
     safeContexts[context] !== undefined ? safeContexts[context] : {};
