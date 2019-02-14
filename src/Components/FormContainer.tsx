@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useReducer, Reducer } from 'react';
 import { LocationForm } from "./LocationForm";
 import styled from "styled-components";
 import { normalize } from "normalizr";
@@ -11,9 +11,70 @@ import { changeHandlerBuilder } from "../Utils/Utils";
 import { MainState, Normalized, Errors } from "../Definitions/main";
 import { DemoFormErrors, DemoFormEntities } from "../Definitions/DemoForm";
 import { LocationFormErrors, LocationFormEntities } from "../Definitions/LocationForm";
+import { Location } from '../Models/Location';
+import { Address } from '../Models/Address';
+
+const createNewLocation = (): Location => {
+  // TODO The fact that all of this is necessary means that I am doing a poor job of handling possible nulls or undefined. Improve this.
+  const newLocation = new Location();
+  newLocation.address = new Address();
+  const newBuilding = new Building();
+  newBuilding.address = new Address();
+  newLocation.buildings = [newBuilding];
+  return newLocation;
+}
+
+const LocationReducer: Reducer<LocationFormEntities, any> = (state, action) => {
+  switch (action.type) {
+    case 'CLEAR_FORM':
+      return normalize([action.payload], [LocationSchema]).entities;
+    case 'ADD_LOCATION':
+      const newLocationNormalized: LocationFormEntities = normalize([action.payload], [LocationSchema]).entities;
+      return ({
+        addresses: { ...state.addresses, ...newLocationNormalized.addresses },
+        buildings: { ...state.buildings, ...newLocationNormalized.buildings },
+        locations: { ...state.locations, ...newLocationNormalized.locations }
+      });
+    default:
+      return state;
+  }
+};
+
+const LocationErrorsReducer: Reducer<LocationFormErrors, any> = (state, action) => {
+  switch (action.type) {
+    case 'CLEAR_FORM':
+      return createLocationErrorsObject(normalize([action.payload], [LocationSchema]).entities);
+    case 'ADD_LOCATION':
+      const newLocationNormalized: LocationFormEntities = normalize([action.payload], [LocationSchema]).entities;
+      const newLocationsNormalized = ({
+        addresses: { ...state.addresses, ...newLocationNormalized.addresses },
+        buildings: { ...state.buildings, ...newLocationNormalized.buildings },
+        locations: { ...state.locations, ...newLocationNormalized.locations }
+      });
+      return createLocationErrorsObject(newLocationsNormalized);
+    default:
+      return state;
+  }
+};
+
+const AppReducer: Reducer<MainState, any> = (state, action) => {
+  return ({
+    entities: {},
+    contexts: {
+      DemoForm: {
+        entities: fetchBuildings(),
+        errors: createErrorsObject(fetchBuildings())
+      },
+      LocationForm: {
+        entities: LocationReducer(state!.contexts!.LocationForm!.entities!, action),
+        errors: LocationErrorsReducer(state!.contexts!.LocationForm!.errors!, action)
+      }
+    }
+  })
+}
 
 export const FormContainer: FunctionComponent<{}> = () => {
-  const [state, setState] = useState<MainState>({
+  const [state, dispatch] = useReducer(AppReducer, {
     entities: {},
     contexts: {
       DemoForm: {
@@ -27,32 +88,12 @@ export const FormContainer: FunctionComponent<{}> = () => {
     }
   });
 
-  const clearFormHandler = () => {
-    const emptyBuilding: Normalized<Building> = new BuildingNormalized();
-    const emptyBuildingErrors: Errors<Building> = {
-      construction: undefined,
-      name: undefined,
-      website: undefined
-    };
+  const addNewLocationHandler = () => {
+    dispatch({ type: "ADD_LOCATION", payload: createNewLocation() });
+  }
 
-    // TODO - RESEARCH - IS THE NEW SET STATE ASYNC?
-    setState(
-      {
-        ...state,
-        contexts: {
-          DemoForm: {
-            entities: {
-              buildings: keyBy([emptyBuilding], "buildingID")
-            },
-            errors: {
-              buildings: {
-                [emptyBuilding.buildingID]: emptyBuildingErrors
-              }
-            }
-          }
-        }
-      }
-    );
+  const clearFormHandler = () => {
+    dispatch({ type: "CLEAR_FORM", payload: createNewLocation() });
   };
 
   const LocationEntities: LocationFormEntities =
@@ -85,6 +126,7 @@ export const FormContainer: FunctionComponent<{}> = () => {
         entities={LocationEntities}
         errors={LocationErrors}
         // validateAllHandler={validateAllLocationHandler}
+        addLocationHandler={addNewLocationHandler}
         clearFormHandler={clearFormHandler}
       />
     </Container>

@@ -11,7 +11,8 @@ import { keys } from "lodash";
 import styled from "styled-components";
 import { LocationFormEntities, LocationFormErrors } from "../Definitions/LocationForm";
 import { Location } from '../Models/Location';
-import TextField from '@material-ui/core';
+import { Building } from "../Models/Building";
+import { Address } from "../Models/Address";
 
 interface Props {
   // TODO: Make a type alias for this.
@@ -23,7 +24,8 @@ interface Props {
   // onValidationChange: (entity: keyof LocationFormEntities) => (field: string, id: number) => (newValue: any) => void,
   // TODO: fix this any
   // validateAllHandler: (newErrors: any) => void;
-  clearFormHandler: () => void;
+  addLocationHandler: () => void,
+  clearFormHandler: () => void
 }
 
 export const LocationForm: FunctionComponent<Props> = props => {
@@ -51,17 +53,17 @@ export const LocationForm: FunctionComponent<Props> = props => {
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                 >
-                  {`${location.locationID} - ${location.locationName} ${location.address!.city}, ${location.address!.state} ${location.address!.zip} `}
+                  {`${location.locationNum} - ${location.locationName} ${location.address!.city}, ${location.address!.state} ${location.address!.zip} `}
                 </ExpansionPanelSummary>
                 <LocationRow key={`location_${location.id}`}>
-                  <ValidatedInput
-                    fieldName="locationNumber"
+                  <ValidatedInput<Location>
+                    fieldName="locationNum"
                     label="Location #"
                     entity="locations"
                     id={location.id}
                     validators={[required, maxLength(20)]}
                   />
-                  <ValidatedInput
+                  <ValidatedInput<Location>
                     fieldName="locationName"
                     label="Location Name"
                     entity="locations"
@@ -69,29 +71,29 @@ export const LocationForm: FunctionComponent<Props> = props => {
                     validators={[required, maxLength(20)]}
                   />
                   <br />
-                  <ValidatedInput
+                  <ValidatedInput<Address>
                     fieldName="line1"
                     label="Line 1"
                     entity="addresses"
-                    id={location.address!.id}
+                    id={location.address!.addressID}
                     validators={[required, maxLength(20)]}
                   />
-                  <ValidatedInput
+                  <ValidatedInput<Address>
                     fieldName="city"
                     entity="addresses"
-                    id={location.address!.id}
+                    id={location.address!.addressID}
                     validators={[required, maxLength(20)]}
                   />
-                  <ValidatedInput
+                  <ValidatedInput<Address>
                     fieldName="state"
                     entity="addresses"
-                    id={location.address!.id}
+                    id={location.address!.addressID}
                     validators={[required, maxLength(20)]}
                   />
-                  <ValidatedInput
+                  <ValidatedInput<Address>
                     fieldName="zip"
                     entity="addresses"
-                    id={location.address!.id}
+                    id={location.address!.addressID}
                     validators={[required, maxLength(20)]}
                   />
                 </LocationRow>
@@ -102,87 +104,21 @@ export const LocationForm: FunctionComponent<Props> = props => {
                         <ExpansionPanelSummary>
                           {`${building.buildingID} - ${building.name} - ${building!.address!.line1} ${building!.address!.city}, ${building!.address!.state} ${building!.address!.zip} `}
                         </ExpansionPanelSummary>
-                        <ValidatedInput
+                        <ValidatedInput<Building>
                           fieldName="buildingID"
                           label="Building ID"
                           entity="buildings"
                           id={building.buildingID}
                           validators={[required, maxLength(20)]}
                         />
-                        <ValidatedInput
-                          fieldName="buildingName"
+                        <ValidatedInput<Building>
+                          fieldName="name"
                           label="Building Name"
                           entity="buildings"
                           id={building.buildingID}
                           validators={[required, maxLength(20)]}
                         />
-                        <ValidatedInput
-                          fieldName="streetNumber"
-                          label="Street Number"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
                         <br />
-                        <ValidatedInput
-                          fieldName="isPropertyWithin1000FeetOfWater"
-                          label="Is property within 1000 feet of water"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
-                        <ValidatedInput
-                          fieldName="numberOfBuildings"
-                          label="# of buildings"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
-                        <ValidatedInput
-                          fieldName="originallyBuilt"
-                          label="Originally built"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
-                        <ValidatedInput
-                          fieldName="wiring"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
-                        <ValidatedInput
-                          fieldName="plumbing"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
-                        <ValidatedInput
-                          fieldName="heating"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
-                        <ValidatedInput
-                          fieldName="totalTiv"
-                          label="Total TIV"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
-                        <ValidatedInput
-                          fieldName="basement"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
-                        <ValidatedInput
-                          fieldName="shapeOfRoof"
-                          label="Shape of roof"
-                          entity="buildings"
-                          id={building.buildingID}
-                          validators={[required, maxLength(20)]}
-                        />
                       </ExpansionPanel>
                     </div>
                   ))}
@@ -191,7 +127,8 @@ export const LocationForm: FunctionComponent<Props> = props => {
             ))}
             <ButtonRow>
               <SubmitButton />
-              <ClearButton />
+              <ClearButton onClick={props.clearFormHandler} />
+              <button onClick={props.addLocationHandler}> Add Location </button>
             </ButtonRow>
           </FormContents>
         )}

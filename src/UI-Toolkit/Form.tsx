@@ -3,7 +3,7 @@ import { default as ValidatedInput } from "./ValidatedInput";
 import { addOrEditEntityField } from "../Utils/Utils";
 import Button from '@material-ui/core/Button';
 import styled from "styled-components";
-import { Validator } from "../Definitions/main";
+import { Validator, NonFunctionPropertyNames } from "../Definitions/main";
 // import { filter, map, mapValues } from "lodash";
 
 // TODO: Work on making this generic.
@@ -17,10 +17,26 @@ import { Validator } from "../Definitions/main";
 
 // TODO: make it possible to add form level validations, e.g. if multiple text fields, addition cannot be over 100;
 
+interface ClearButtonProps {
+  onClick?: () => void
+}
+
+interface ValidatedInputProps<T> {
+  // TODO: this type could be better
+  entity: string;
+  errors?: string[] | null | undefined;
+  fieldName: NonFunctionPropertyNames<T>;
+  id: number;
+  // TODO: Make a type alias for this. Use generic at the highest level and have that be used for this field?
+  label?: string;
+  // TODO: Same thing here. I should be able to make it into a generic that can infer this.
+  validators: Validator[];
+}
+
 interface RenderProps {
-  ValidatedInput: FunctionComponent<ValidatedInputProps>;
+  ValidatedInput: <K>(cProps: ValidatedInputProps<K>) => JSX.Element;
   SubmitButton: FunctionComponent;
-  ClearButton: FunctionComponent;
+  ClearButton: FunctionComponent<ClearButtonProps>;
   ButtonRow: FunctionComponent;
 }
 
@@ -37,7 +53,6 @@ interface Props<T> {
   // onValidationChange: any,
   clearForm: () => void;
   children: (renderProps: RenderProps) => ReactNode;
-
 }
 
 class Form<T> extends React.Component<Props<T>, {}> {
@@ -50,9 +65,9 @@ class Form<T> extends React.Component<Props<T>, {}> {
     </Button>
   );
 
-  public ClearButton = () => (
+  public ClearButton = (cProps: ClearButtonProps) => (
     // <Button variant="contained" onClick={this.runAllValidators}>
-    <Button variant="contained" onClick={() => { }}>
+    <Button variant="contained" onClick={cProps.onClick}>
       Clear
     </Button>
   );
@@ -61,7 +76,7 @@ class Form<T> extends React.Component<Props<T>, {}> {
     <StyledButtonRow>{cProps.children}</StyledButtonRow>
   )
 
-  public ValidatedInput = (cProps: ValidatedInputProps) => {
+  public ValidatedInput: <K>(cProps: ValidatedInputProps<K>) => JSX.Element = (cProps) => {
     this.fieldValidators = {
       ...this.fieldValidators,
       [cProps.fieldName]: cProps.validators
@@ -119,18 +134,6 @@ class Form<T> extends React.Component<Props<T>, {}> {
 }
 
 export default Form;
-
-interface ValidatedInputProps {
-  // TODO: this type could be better
-  entity: string;
-  errors?: string[] | null | undefined;
-  fieldName: string;
-  id: number;
-  // TODO: Make a type alias for this. Use generic at the highest level and have that be used for this field?
-  label?: string;
-  // TODO: Same thing here. I should be able to make it into a generic that can infer this.
-  validators: Validator[];
-}
 
 const StyledButtonRow = styled.div`
   display: flex-inline;

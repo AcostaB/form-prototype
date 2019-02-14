@@ -1,6 +1,23 @@
 import { DemoFormEntities, DemoFormErrors } from './DemoForm';
 import { LocationFormEntities, LocationFormErrors } from './LocationForm';
 
+export type FunctionPropertyNames<T> = {
+  [K in keyof T]: T[K] extends Function ? K : never
+}[keyof T];
+
+export type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
+
+/**
+ * This type generates a union type that contains ONLY the property names of an object. 
+ * The property names must be strings, not number or symbol.
+ * e.g. NonFunctionPropertyNames<{color: string, age: number}> will return => 'color' | 'age'
+ */
+export type NonFunctionPropertyNames<T> = {
+  [K in keyof T]: T[K] extends Function ? never : K extends string ? K : never
+}[keyof T];
+
+export type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
+
 export type NormalizeOne<T> = T extends number
   ? number
   : T extends string

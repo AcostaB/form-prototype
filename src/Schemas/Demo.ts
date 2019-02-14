@@ -7,6 +7,7 @@ export const apartment = new schema.Entity("apartments", {
   tenants: [person]
 }, { idAttribute: "apartmentID" });
 
+// TODO This could be typed better. idAttribute should be a property of the address model.
 export const address = new schema.Entity("addresses", {}, { idAttribute: "addressID" });
 
 export const building = new schema.Entity("buildings", {

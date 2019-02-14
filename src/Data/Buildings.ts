@@ -7,7 +7,6 @@ export const data: Building[] = [
     "construction": "wood",
     "website": "avengers.com",
     "address": {
-      "id": 1,
       "addressID": 1,
       "line1": "street",
       "line2": "avenue",
@@ -68,7 +67,6 @@ export const data: Building[] = [
     "construction": "wood",
     "website": "willywonka.com",
     "address": {
-      "id": 2,
       "addressID": 2,
       "line1": "street",
       "line2": "avenue",
