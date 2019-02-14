@@ -1,5 +1,5 @@
 import React, { ReactNode, SFC } from "react";
-import { default as VI } from "../UI-Toolkit/ValidatedInput";
+import { default as ValidatedInput } from "../UI-Toolkit/ValidatedInput";
 import { addOrEditEntityField, mapValidatorsToErrors } from "../Utils/Utils";
 import Button from '@material-ui/core/Button';
 import styled from "styled-components";
@@ -30,11 +30,11 @@ interface IProps<T> {
   // TODO fix this any
   errors: any;
   // TODO fix this any
-  validateAll: (newErrors: any) => void;
+  // validateAll: (newErrors: any) => void;
   // TODO fix this any
   onFieldChange: any,
   // TODO fix this any
-  onValidationChange: any,
+  // onValidationChange: any,
   clearForm: () => void;
   children: (renderProps: RenderProps) => ReactNode;
 
@@ -44,13 +44,15 @@ class Form<T> extends React.Component<IProps<T>, {}> {
   public fieldValidators = {};
 
   public SubmitButton = () => (
-    <Button variant="contained" color="primary" onClick={this.runAllValidators}>
+    // <Button variant="contained" onClick={this.runAllValidators}>
+    <Button variant="contained" color="primary" onClick={() => { }}>
       Submit
     </Button>
   );
 
   public ClearButton = () => (
-    <Button variant="contained" onClick={this.runAllValidators}>
+    // <Button variant="contained" onClick={this.runAllValidators}>
+    <Button variant="contained" onClick={() => { }}>
       Clear
     </Button>
   );
@@ -64,7 +66,12 @@ class Form<T> extends React.Component<IProps<T>, {}> {
       ...this.fieldValidators,
       [cProps.fieldName]: cProps.validators
     };
-    const { onFieldChange, onValidationChange, entities, errors } = this.props;
+    const {
+      onFieldChange,
+      // onValidationChange,
+      entities,
+      errors
+    } = this.props;
     const { entity, fieldName, id, validators } = cProps;
 
     // Insert the validators. Function handles possible references to undefined objects.
@@ -77,12 +84,12 @@ class Form<T> extends React.Component<IProps<T>, {}> {
     );
 
     return (
-      <VI
+      <ValidatedInput
         {...cProps}
         value={entities[entity][id][fieldName]}
         label={cProps.label !== undefined ? cProps.label : cProps.fieldName}
         onFieldChange={onFieldChange(entity)(fieldName)(id)}
-        onValidationChange={onValidationChange(entity)(fieldName, id)}
+        onValidationChange={() => { }}
         errors={errors[entity][id][fieldName]}
         validators={cProps.validators}
       />
@@ -90,14 +97,14 @@ class Form<T> extends React.Component<IProps<T>, {}> {
   };
 
   // TODO drastically need to improve on this.
-  public runAllValidators = () => {
-    const newErrors = mapValidatorsToErrors(
-      this.fieldValidators,
-      this.props.entities
-    );
+  // public runAllValidators = () => {
+  //   const newErrors = mapValidatorsToErrors(
+  //     this.fieldValidators,
+  //     this.props.entities
+  //   );
 
-    this.props.validateAll(newErrors);
-  };
+  //   this.props.validateAll(newErrors);
+  // };
 
   public render = () => (
     <div>

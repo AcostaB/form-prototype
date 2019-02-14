@@ -35,10 +35,10 @@ const DemoForm: SFC<Props> = props => {
       <Form
         entities={props.entities}
         errors={props.errors}
-        validateAll={props.validateAllHandler}
+        // validateAll={props.validateAllHandler}
         clearForm={props.clearFormHandler}
         onFieldChange={props.onFieldChange}
-        onValidationChange={props.onValidationChange}
+      // onValidationChange={props.onValidationChange}
       >
         {({ ValidatedInput, SubmitButton, ClearButton }) => (
           <FormContents>

@@ -19,9 +19,9 @@ interface Props {
   errors: LocationFormErrors,
   // TODO fix these anys
   onFieldChange: (entity: keyof LocationFormEntities) => (field: string) => (id: number) => (newValue: any) => void,
-  onValidationChange: (entity: keyof LocationFormEntities) => (field: string, id: number) => (newValue: any) => void,
+  // onValidationChange: (entity: keyof LocationFormEntities) => (field: string, id: number) => (newValue: any) => void,
   // TODO: fix this any
-  validateAllHandler: (newErrors: any) => void;
+  // validateAllHandler: (newErrors: any) => void;
   clearFormHandler: () => void;
 }
 
@@ -38,10 +38,10 @@ export const LocationForm: SFC<Props> = props => {
       <Form
         entities={props.entities}
         errors={props.errors}
-        validateAll={props.validateAllHandler}
+        // validateAll={props.validateAllHandler}
         clearForm={props.clearFormHandler}
         onFieldChange={props.onFieldChange}
-        onValidationChange={props.onValidationChange}
+      // onValidationChange={props.onValidationChange}
       >
         {({ ValidatedInput, SubmitButton, ClearButton, ButtonRow }) => (
           <FormContents>

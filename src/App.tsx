@@ -49,20 +49,20 @@ class App extends React.Component<{}, MainState> {
     );
   };
 
-  public validateAllLocationHandler = (newErrorsByEntity: LocationFormErrors) => {
-    this.setState(
-      (prevState: MainState): MainState => ({
-        ...prevState,
-        contexts: {
-          ...prevState.contexts,
-          LocationForm: {
-            ...prevState.contexts!.LocationForm,
-            errors: newErrorsByEntity
-          }
-        }
-      })
-    );
-  };
+  // public validateAllLocationHandler = (newErrorsByEntity: LocationFormErrors) => {
+  //   this.setState(
+  //     (prevState: MainState): MainState => ({
+  //       ...prevState,
+  //       contexts: {
+  //         ...prevState.contexts,
+  //         LocationForm: {
+  //           ...prevState.contexts!.LocationForm,
+  //           errors: newErrorsByEntity
+  //         }
+  //       }
+  //     })
+  //   );
+  // };
 
   public clearFormHandler = () => {
     const emptyBuilding: Normalized<Building> = new BuildingNormalized();
@@ -138,10 +138,10 @@ class App extends React.Component<{}, MainState> {
         /> */}
           <LocationForm
             onFieldChange={changeHandlerBuilder("LocationForm")("entities")}
-            onValidationChange={changeHandlerBuilder("LocationForm")("errors")}
+            // onValidationChange={changeHandlerBuilder("LocationForm")("errors")}
             entities={LocationEntities}
             errors={LocationErrors}
-            validateAllHandler={this.validateAllLocationHandler}
+            // validateAllHandler={this.validateAllLocationHandler}
             clearFormHandler={this.clearFormHandler}
           />
         </Container>
