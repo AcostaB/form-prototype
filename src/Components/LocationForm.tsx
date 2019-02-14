@@ -1,6 +1,6 @@
-import React, { SFC } from "react";
+import React, { FunctionComponent } from "react";
 import { required, maxLength } from "../Validators/Validators";
-import Form from "./Form";
+import Form from "../UI-Toolkit/Form";
 import { map } from "lodash";
 import { denormalize } from "normalizr";
 import { location as locationSchema } from "../Schemas/Demo";
@@ -11,6 +11,7 @@ import { keys } from "lodash";
 import styled from "styled-components";
 import { LocationFormEntities, LocationFormErrors } from "../Definitions/LocationForm";
 import { Location } from '../Models/Location';
+import TextField from '@material-ui/core';
 
 interface Props {
   // TODO: Make a type alias for this.
@@ -25,7 +26,7 @@ interface Props {
   clearFormHandler: () => void;
 }
 
-export const LocationForm: SFC<Props> = props => {
+export const LocationForm: FunctionComponent<Props> = props => {
   const data: { locations: Location[] } = denormalize(
     { locations: keys(props.entities.locations) },
     { locations: [locationSchema] },

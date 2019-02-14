@@ -1,6 +1,6 @@
-import React, { ReactNode, SFC } from "react";
-import { default as ValidatedInput } from "../UI-Toolkit/ValidatedInput";
-import { addOrEditEntityField, mapValidatorsToErrors } from "../Utils/Utils";
+import React, { ReactNode, FunctionComponent } from "react";
+import { default as ValidatedInput } from "./ValidatedInput";
+import { addOrEditEntityField } from "../Utils/Utils";
 import Button from '@material-ui/core/Button';
 import styled from "styled-components";
 import { Validator } from "../Definitions/main";
@@ -18,13 +18,13 @@ import { Validator } from "../Definitions/main";
 // TODO: make it possible to add form level validations, e.g. if multiple text fields, addition cannot be over 100;
 
 interface RenderProps {
-  ValidatedInput: SFC<IValidatedInputProps>;
-  SubmitButton: SFC;
-  ClearButton: SFC;
-  ButtonRow: SFC;
+  ValidatedInput: FunctionComponent<ValidatedInputProps>;
+  SubmitButton: FunctionComponent;
+  ClearButton: FunctionComponent;
+  ButtonRow: FunctionComponent;
 }
 
-interface IProps<T> {
+interface Props<T> {
   // TODO: fix this any
   entities: any;
   // TODO fix this any
@@ -40,7 +40,7 @@ interface IProps<T> {
 
 }
 
-class Form<T> extends React.Component<IProps<T>, {}> {
+class Form<T> extends React.Component<Props<T>, {}> {
   public fieldValidators = {};
 
   public SubmitButton = () => (
@@ -61,7 +61,7 @@ class Form<T> extends React.Component<IProps<T>, {}> {
     <StyledButtonRow>{cProps.children}</StyledButtonRow>
   )
 
-  public ValidatedInput = (cProps: IValidatedInputProps) => {
+  public ValidatedInput = (cProps: ValidatedInputProps) => {
     this.fieldValidators = {
       ...this.fieldValidators,
       [cProps.fieldName]: cProps.validators
@@ -120,7 +120,7 @@ class Form<T> extends React.Component<IProps<T>, {}> {
 
 export default Form;
 
-interface IValidatedInputProps {
+interface ValidatedInputProps {
   // TODO: this type could be better
   entity: string;
   errors?: string[] | null | undefined;

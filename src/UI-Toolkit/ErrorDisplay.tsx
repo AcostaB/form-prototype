@@ -1,5 +1,5 @@
 import React, {
-  SFC
+  FunctionComponent
 } from 'react';
 
 import { createStyles, withStyles } from "@material-ui/core";
@@ -13,7 +13,7 @@ interface IProps {
   classes: any; // TODO fix this any
 }
 
-const ErrorDisplay: SFC<IProps> = ({ errors, classes }) => {
+const ErrorDisplay: FunctionComponent<IProps> = ({ errors, classes }) => {
   const displayError: boolean = errors !== null && errors !== undefined && errors.length > 0;
   const displayTooltip: boolean = errors !== null && errors !== undefined && errors.length > 1;
   // TODO fix this any.

@@ -1,6 +1,6 @@
-import React, { SFC } from "react";
+import React, { FunctionComponent } from "react";
 import { required, maxLength } from "../Validators/Validators";
-import Form from "./Form";
+import Form from "../UI-Toolkit/Form";
 import { map } from "lodash";
 import { denormalize } from "normalizr";
 import { building as buildingSchema } from "../Schemas/Demo";
@@ -22,7 +22,7 @@ interface Props {
   clearFormHandler: () => void;
 }
 
-const DemoForm: SFC<Props> = props => {
+const DemoForm: FunctionComponent<Props> = props => {
   const data: { buildings: Building[] } = denormalize(
     { buildings: keys(props.entities.buildings) },
     { buildings: [buildingSchema] },

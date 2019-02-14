@@ -1,5 +1,5 @@
 import React, {
-  SFC
+  FunctionComponent
 } from 'react';
 
 import { createStyles, withStyles, Theme } from "@material-ui/core";
@@ -11,7 +11,7 @@ import { map, filter } from "lodash";
 import styled from "styled-components";
 import { Validator } from '../Definitions/main';
 
-export interface IProps {
+export interface Props {
   // TODO: fix this any
   classes: any,
   errors?: string[] | null | undefined,
@@ -24,7 +24,7 @@ export interface IProps {
   value: string | number;
 }
 
-const ValidatedInput: SFC<IProps> = (props) => {
+const ValidatedInput: FunctionComponent<Props> = (props) => {
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const newValue = event.target.value;
