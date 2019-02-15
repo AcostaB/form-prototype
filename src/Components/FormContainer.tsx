@@ -1,18 +1,19 @@
 import React, { FunctionComponent, useReducer, Reducer } from 'react';
 import { LocationForm } from "./LocationForm";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { normalize } from "normalizr";
 import { building as BuildingSchema, location as LocationSchema } from "../Schemas/Demo";
 import { data as buildingData } from "../Data/Buildings";
 import { data as locationData } from "../Data/Location";
-import { mapValues, keyBy } from "lodash";
-import { BuildingNormalized, Building } from "../Models/Building";
+import { mapValues } from "lodash";
+import { Building } from "../Models/Building";
 import { changeHandlerBuilder } from "../Utils/Utils";
-import { MainState, Normalized, Errors } from "../Definitions/main";
+import { MainState, Normalized, Keyed } from "../Definitions/main";
 import { DemoFormErrors, DemoFormEntities } from "../Definitions/DemoForm";
 import { LocationFormErrors, LocationFormEntities } from "../Definitions/LocationForm";
 import { Location } from '../Models/Location';
 import { Address } from '../Models/Address';
+import { filter } from 'lodash';
 
 const createNewLocation = (): Location => {
   // TODO The fact that all of this is necessary means that I am doing a poor job of handling possible nulls or undefined. Improve this.
@@ -35,6 +36,34 @@ const LocationReducer: Reducer<LocationFormEntities, any> = (state, action) => {
         buildings: { ...state.buildings, ...newLocationNormalized.buildings },
         locations: { ...state.locations, ...newLocationNormalized.locations }
       });
+    case 'DELETE_LOCATION':
+      const newState = { ...state };
+      delete (newState.locations!)[action.payload]
+      return newState;
+    case 'ADD_BUILDING':
+      const newBuildingNormalized: Keyed<Normalized<Building>> = normalize([action.payload.building], [BuildingSchema]).entities.buildings;
+      return ({
+        addresses: { ...state.addresses },
+        buildings: { ...state.buildings, ...newBuildingNormalized },
+        locations: {
+          ...state.locations,
+          [action.payload.locationID]: {
+            ...state.locations![action.payload.locationID],
+            buildings: [...state.locations![action.payload.locationID]!.buildings, action.payload.building.buildingID]
+          }
+        }
+      });
+    case 'REMOVE_BUILDING':
+      return ({
+        ...state,
+        locations: {
+          ...state.locations,
+          [action.payload.locationID]: {
+            ...state.locations![action.payload.locationID],
+            buildings: filter(state!.locations![action.payload.locationID]!.buildings, (value: number) => value !== action.payload.buildingID)
+          }
+        }
+      })
     default:
       return state;
   }
@@ -52,6 +81,39 @@ const LocationErrorsReducer: Reducer<LocationFormErrors, any> = (state, action) 
         locations: { ...state.locations, ...newLocationNormalized.locations }
       });
       return createLocationErrorsObject(newLocationsNormalized);
+    case 'DELETE_LOCATION':
+      const newState = { ...state };
+      delete (newState.locations!)[action.payload]
+      return newState;
+    case 'ADD_BUILDING':
+      const newBuildingNormalized: Keyed<Normalized<Building>> = normalize([action.payload.building], [BuildingSchema]).entities.buildings;
+      return ({
+        addresses: { ...state.addresses },
+        buildings: {
+          ...state.buildings,
+          [action.payload.building.buildingID]: {
+            ...mapValues(newBuildingNormalized[action.payload.building.buildingID], () => [])
+          }
+        },
+        locations: {
+          ...state.locations,
+          [action.payload.locationID]: {
+            ...state.locations![action.payload.locationID],
+            buildings: []
+          }
+        }
+      });
+    case 'REMOVE_BUILDING':
+      return ({
+        ...state,
+        locations: {
+          ...state.locations,
+          [action.payload.locationID]: {
+            ...state.locations![action.payload.locationID],
+            buildings: filter(state!.locations![action.payload.locationID]!.buildings, (value: number) => value !== action.payload.buildingID)
+          }
+        }
+      })
     default:
       return state;
   }
@@ -88,14 +150,6 @@ export const FormContainer: FunctionComponent<{}> = () => {
     }
   });
 
-  const addNewLocationHandler = () => {
-    dispatch({ type: "ADD_LOCATION", payload: createNewLocation() });
-  }
-
-  const clearFormHandler = () => {
-    dispatch({ type: "CLEAR_FORM", payload: createNewLocation() });
-  };
-
   const LocationEntities: LocationFormEntities =
     state.contexts !== undefined
       && state.contexts.LocationForm !== undefined
@@ -126,8 +180,11 @@ export const FormContainer: FunctionComponent<{}> = () => {
         entities={LocationEntities}
         errors={LocationErrors}
         // validateAllHandler={validateAllLocationHandler}
-        addLocationHandler={addNewLocationHandler}
-        clearFormHandler={clearFormHandler}
+        addLocationHandler={() => dispatch({ type: "ADD_LOCATION", payload: createNewLocation() })}
+        deleteLocationHandler={(id: number) => dispatch({ type: "DELETE_LOCATION", payload: id })}
+        addBuildingToLocationHandler={(locationID: number) => dispatch({ type: 'ADD_BUILDING', payload: { locationID, building: new Building() } })}
+        removeBuildingFromLocationHandler={(locationID: number, buildingID: number) => dispatch({ type: 'REMOVE_BUILDING', payload: { locationID, buildingID } })}
+        clearFormHandler={() => dispatch({ type: "CLEAR_FORM", payload: createNewLocation() })}
       />
     </Container>
   );

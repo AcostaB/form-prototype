@@ -6,7 +6,7 @@ import { createStyles, withStyles } from "@material-ui/core";
 import Tooltip from '@material-ui/core/Tooltip';
 import Icon from '@material-ui/core/Icon';
 import { map } from "lodash";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 interface IProps {
   errors?: string[] | null | undefined;

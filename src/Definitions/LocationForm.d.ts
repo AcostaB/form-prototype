@@ -4,6 +4,7 @@ import { Person } from '../Models/Person';
 import { Building } from '../Models/Building';
 import { Apartment } from '../Models/Apartment';
 import { Address } from '../Models/Address';
+import { Location } from '../Models/Location';
 
 export interface LocationFormEntities extends NormalizedEntities {
   addresses?: Keyed<Normalized<Address>>;

@@ -8,7 +8,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import ErrorDisplay from "../UI-Toolkit/ErrorDisplay";
 import { map, filter } from "lodash";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { Validator } from '../Definitions/main';
 
 export interface Props {

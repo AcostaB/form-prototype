@@ -5,7 +5,7 @@ import { map } from "lodash";
 import { denormalize } from "normalizr";
 import { building as buildingSchema } from "../Schemas/Demo";
 import { keys } from "lodash";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { Building } from "../Models/Building";
 import { DemoFormEntities, DemoFormErrors } from "../Definitions/DemoForm";
 

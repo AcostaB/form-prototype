@@ -2,7 +2,7 @@ import React, { ReactNode, FunctionComponent } from "react";
 import { default as ValidatedInput } from "./ValidatedInput";
 import { addOrEditEntityField } from "../Utils/Utils";
 import Button from '@material-ui/core/Button';
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { Validator, NonFunctionPropertyNames } from "../Definitions/main";
 // import { filter, map, mapValues } from "lodash";
 

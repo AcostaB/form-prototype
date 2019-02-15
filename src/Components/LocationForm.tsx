@@ -6,13 +6,14 @@ import { denormalize } from "normalizr";
 import { location as locationSchema } from "../Schemas/Demo";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { ExpandMore as ExpandMoreIcon, Delete as DeleteIcon, Add as AddIcon } from '@material-ui/icons';
 import { keys } from "lodash";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { LocationFormEntities, LocationFormErrors } from "../Definitions/LocationForm";
 import { Location } from '../Models/Location';
 import { Building } from "../Models/Building";
 import { Address } from "../Models/Address";
+import Button from "@material-ui/core/Button";
 
 interface Props {
   // TODO: Make a type alias for this.
@@ -25,6 +26,9 @@ interface Props {
   // TODO: fix this any
   // validateAllHandler: (newErrors: any) => void;
   addLocationHandler: () => void,
+  deleteLocationHandler: (id: number) => void,
+  addBuildingToLocationHandler: (locationID: number) => void,
+  removeBuildingFromLocationHandler: (locationID: number, buildingID: number) => void,
   clearFormHandler: () => void
 }
 
@@ -34,6 +38,13 @@ export const LocationForm: FunctionComponent<Props> = props => {
     { locations: [locationSchema] },
     props.entities
   );
+
+  const formattedAddress = (building: Building) => {
+    if (!!building && !!building.address) {
+      return `${building.buildingID} - ${building.name} - ${building.address.line1} ${building.address.city}, ${building.address.state} ${building.address.zip} `
+    }
+    return ''
+  }
 
   return (
     <div>
@@ -53,7 +64,17 @@ export const LocationForm: FunctionComponent<Props> = props => {
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                 >
-                  {`${location.locationNum} - ${location.locationName} ${location.address!.city}, ${location.address!.state} ${location.address!.zip} `}
+                  <ExpansionPanelSummaryWrapper>
+                    <span>
+                      {`${location.locationNum} - ${location.locationName} ${location.address!.city}, ${location.address!.state} ${location.address!.zip} `}
+                    </span>
+                    <StyledAddIcon onClick={(e: any) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      props.addBuildingToLocationHandler(location.id);
+                    }} />
+                    <StyledDeleteIcon onClick={() => props.deleteLocationHandler(location.id)} />
+                  </ExpansionPanelSummaryWrapper>
                 </ExpansionPanelSummary>
                 <LocationRow key={`location_${location.id}`}>
                   <ValidatedInput<Location>
@@ -102,7 +123,12 @@ export const LocationForm: FunctionComponent<Props> = props => {
                     <div key={building.buildingID}>
                       <ExpansionPanel>
                         <ExpansionPanelSummary>
-                          {`${building.buildingID} - ${building.name} - ${building!.address!.line1} ${building!.address!.city}, ${building!.address!.state} ${building!.address!.zip} `}
+                          <ExpansionPanelSummaryWrapper>
+                            <span>
+                              {formattedAddress(building)}
+                            </span>
+                            <StyledDeleteIcon onClick={() => props.removeBuildingFromLocationHandler(location.id, building.buildingID)} />
+                          </ExpansionPanelSummaryWrapper>
                         </ExpansionPanelSummary>
                         <ValidatedInput<Building>
                           fieldName="buildingID"
@@ -128,7 +154,7 @@ export const LocationForm: FunctionComponent<Props> = props => {
             <ButtonRow>
               <SubmitButton />
               <ClearButton onClick={props.clearFormHandler} />
-              <button onClick={props.addLocationHandler}> Add Location </button>
+              <Button variant="contained" onClick={props.addLocationHandler}> Add Location </Button>
             </ButtonRow>
           </FormContents>
         )}
@@ -146,6 +172,19 @@ const LocationRow = styled.div`
 const BuildingRow = styled.div`
   vertical-align: top;
 `;
+
+const ExpansionPanelSummaryWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledAddIcon = styled<any>(AddIcon)`
+  padding-left: 10px;
+`;
+
+const StyledDeleteIcon = styled<any>(DeleteIcon)`
+  padding-left: 10px;
+` as typeof DeleteIcon;
 
 // const formStyles = (theme: Theme) => createStyles({
 
